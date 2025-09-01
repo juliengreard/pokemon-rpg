@@ -1,0 +1,1 @@
+docker compose run backend python app/init_db.py
