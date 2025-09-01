@@ -7,4 +7,5 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./backend/app:/app/app
+      - ./backend/app:/app/app          # code Python pour dev
+      - ./backend/data:/app/data       # données persistantes (SQLite, images)
