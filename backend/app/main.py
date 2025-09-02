@@ -14,11 +14,20 @@ from app import (
     models,
     schema,
 )
+import os
+from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+
+app = FastAPI()
+
+# Mount static files
+BASE_DIR = "/app"  # container working dir
+IMAGES_DIR = os.path.join(BASE_DIR, "data/images")
+
+app.mount("/images", StaticFiles(directory=IMAGES_DIR), name="images")
 
 # crée les tables si besoin
 models.Base.metadata.create_all(bind=engine)
-
-app = FastAPI(title="Pokemon RPG API")
 
 # dépendance DB par requête
 def get_db():
