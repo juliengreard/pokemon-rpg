@@ -1,7 +1,62 @@
-from fastapi import FastAPI
+from fastapi import (
+    FastAPI,
+    Depends, 
+    HTTPException, 
+    Query,
+)
+from sqlalchemy.orm import Session
 
-app = FastAPI()
+from app.database import (
+    SessionLocal,
+    engine,
+)
+from app import (
+    models,
+    schema,
+)
+
+# crée les tables si besoin
+models.Base.metadata.create_all(bind=engine)
+
+app = FastAPI(title="Pokemon RPG API")
+
+# dépendance DB par requête
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 @app.get("/")
-def read_root():
-    return {"message": "Hello Pokémon RPG!"}
+def root():
+    return {"status": "ok"}
+
+
+# Liste tous les pokémon (avec nom de famille)
+@app.get("/pokemons")
+def list_pokemons(db: Session = Depends(get_db)):
+    pokes = db.query(models.Pokemon).all()
+    return [
+        {"id": p.id, "family": (p.family.name if p.family else None), "level": p.level, "hp": p.hp}
+        for p in pokes
+    ]
+
+@app.post("/pokemon/", response_model=schema.WildPokemon)
+def create_pokemon(data: schema.WildPokemonEncounter, db: Session = Depends(get_db)):
+    
+    # find families from the given location
+    location = db.query(models.Location).filter(models.Location.name == data.location).first()
+    if not location:
+        raise HTTPException(status_code=400, detail="Location not found")
+    possible_families = location.families
+    if not possible_families:
+        raise HTTPException(status_code=400, detail="No Pokemon families found in this location")
+    
+    family = possible_families[0]
+
+    return schema.WildPokemon(
+        family=family.name,
+        level=data.player_level,
+        hp=100
+    )   
