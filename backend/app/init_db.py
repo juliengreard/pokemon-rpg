@@ -50,6 +50,9 @@ with open("data/pokemon.csv", "r") as f:
         type1 = db.query(PokemonType).filter(PokemonType.name == type1_name).first()
         type2 = db.query(PokemonType).filter(PokemonType.name == type2_name).first() if type2_name else None
 
+        print("Inserting family:", number, name, type1_name, type2_name)
+        print(" type1:", type1)
+        print(" type2:", type2) 
         family = db.query(PokemonFamily).filter(PokemonFamily.name == name).first()
         if not family:
             family = PokemonFamily(number=number, name=name)

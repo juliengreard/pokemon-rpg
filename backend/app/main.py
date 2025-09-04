@@ -54,18 +54,28 @@ def list_pokemons(db: Session = Depends(get_db)):
 @app.post("/pokemon/", response_model=schema.WildPokemon)
 def create_pokemon(data: schema.WildPokemonEncounter, db: Session = Depends(get_db)):
     
-    # find families from the given location
-    location = db.query(models.Location).filter(models.Location.name == data.location).first()
-    if not location:
-        raise HTTPException(status_code=400, detail="Location not found")
-    possible_families = location.families
-    if not possible_families:
-        raise HTTPException(status_code=400, detail="No Pokemon families found in this location")
+    from sqlalchemy.sql.expression import func
     
-    family = possible_families[0]
+    random_family = db.query(models.PokemonFamily).order_by(func.random()).first()
+    family = random_family
+    if not family:
+        raise HTTPException(status_code=400, detail="No Pokemon family found in DB")
 
+    # # find families from the given location
+    # location = db.query(models.Location).filter(models.Location.name == data.location).first()
+    # if not location:
+    #     raise HTTPException(status_code=400, detail="Location not found")
+    # possible_families = location.families
+    # if not possible_families:
+    #     raise HTTPException(status_code=400, detail="No Pokemon families found in this location")
+    
+    # family = possible_families[0]
+    print("family", family.name)
+    print("types", family.types)
     return schema.WildPokemon(
         family=family.name,
         level=data.player_level,
-        hp=100
+        hp=100,
+        types = [t.name for t in family.types],
+        image = f"/images/{family.number}.png"
     )   

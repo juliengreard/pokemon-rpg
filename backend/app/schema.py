@@ -8,6 +8,8 @@ class WildPokemonEncounter(BaseModel):
 # ce qu'on renvoie (réponse)
 class WildPokemon(BaseModel):
     family: str
+    image: str
+    types : list[str]
     level: int
     hp: int
 
