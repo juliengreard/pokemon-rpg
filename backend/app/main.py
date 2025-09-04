@@ -18,7 +18,22 @@ import os
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
-app = FastAPI()
+# app = FastAPI()
+
+
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI(title="Pokemon RPG API")
+
+# --- CORS middleware ---
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # for dev only, later you can restrict to frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Mount static files
 BASE_DIR = "/app"  # container working dir
@@ -77,5 +92,5 @@ def create_pokemon(data: schema.WildPokemonEncounter, db: Session = Depends(get_
         level=data.player_level,
         hp=100,
         types = [t.name for t in family.types],
-        image = f"/images/{family.number}.png"
+        image = f"/pokemon/pokemon/{family.number}.png"
     )   

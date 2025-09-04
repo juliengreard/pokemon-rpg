@@ -64,6 +64,7 @@ with open("data/pokemon.csv", "r") as f:
                     stmt = pokemonfamily_types.insert().values(family_id=family.id, type_id=t.id)
                     db.execute(stmt)
             db.commit()
+            
 
 db.close()
 print("DB initialisée avec quelques Pokémon 🎉")
