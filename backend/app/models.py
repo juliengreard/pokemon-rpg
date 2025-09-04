@@ -18,6 +18,21 @@ pokemonfamily_location = Table(
     Column("location_id", Integer, ForeignKey("locations.id"), primary_key=True),
 )
 
+pokemonfamily_types = Table(
+    "pokemonfamily_types",
+    Base.metadata,
+    Column("family_id", ForeignKey("pokemon_families.id"), primary_key=True),
+    Column("type_id", ForeignKey("pokemon_types.id"), primary_key=True),
+)
+
+class PokemonType(Base):
+    __tablename__ = "pokemon_types"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, unique=True, index=True)
+
+    families = relationship("PokemonFamily", back_populates="types")
+
 class Location(Base):
     __tablename__ = "locations"
 
@@ -34,7 +49,13 @@ class PokemonFamily(Base):
     __tablename__ = "pokemon_families"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
+    number = Column(Integer) # pas forcément unique, cf mega-évolution
+    
+    name = Column(String, unique=True, index=True)
+
+    type_id = Column(Integer, ForeignKey("pokemon_types.id"))
+
+    types = relationship("PokemonType", back_populates="families")
 
 class Pokemon(Base):
     __tablename__ = "pokemons"

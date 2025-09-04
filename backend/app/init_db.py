@@ -1,62 +1,66 @@
-from models import Base, PokemonFamily, Pokemon, Location
-from database import engine, SessionLocal
+from models import (
+    Base,
+    PokemonFamily,
+    Pokemon,
+    Location,
+    PokemonType,
+    pokemonfamily_types,
+)
+
+from database import (
+    engine,
+    SessionLocal,
+)
 
 # Création des tables
 Base.metadata.create_all(bind=engine)
 
 db = SessionLocal()
 
-BULBI = "Bulbizarre"
-# Vérifie si les familles existent déjà pour éviter les doublons
-if db.query(PokemonFamily).count() == 0:
-    # Créer des familles
-    families = [
-        PokemonFamily(name="Pikachu"),
-        PokemonFamily(name=BULBI),
-        PokemonFamily(name="Salamèche"),
-        PokemonFamily(name="Carapuce"),
-        PokemonFamily(name="Roucool"),
-    ]
-    db.add_all(families)
+# read the csv file and populate the pokemon db
+# the csv file is in data/pokemon.csv
+# with columns: # (number),Name,Type 1,Type 2
+import csv
+
+with open("data/pokemon.csv", "r") as f:
+    
+    # first list of types
+    types = set()
+    reader = csv.DictReader(f)
+    for row in reader:
+        types.add(row["Type 1"])
+        if row["Type 2"]:
+            types.add(row["Type 2"])
+    # insert types in db if not exist
+    existing_types = {t.name for t in db.query(PokemonType).all()}
+    new_types = [PokemonType(name=t) for t in types if t not in existing_types]
+    db.add_all(new_types)
     db.commit()
 
-# Récupérer quelques familles pour associer les Pokémon
-pikachu_family = db.query(PokemonFamily).filter_by(name="Pikachu").first()
-bulbasaur_family = db.query(PokemonFamily).filter_by(name=BULBI).first()
-roucoul_family = db.query(PokemonFamily).filter_by(name="Roucool").first()
+    # then insert families
 
-# Créer des Pokémon initiaux
-if db.query(Pokemon).count() == 0:
-    pokemons = [
-        Pokemon(level=5, hp=35, family=pikachu_family),
-        Pokemon(level=3, hp=45, family=bulbasaur_family)
-    ]
-    db.add_all(pokemons)
-    db.commit()
+    f.seek(0)
+    next(f)  # skip header
+    for row in reader:
+        number = int(row["#"])
+        name = row["Name"]
+        type1_name = row["Type 1"]
+        type2_name = row["Type 2"]
 
-# Créer des emplacements initiaux
-if db.query(Location).count() == 0:
-    locations = [
-        Location(name="grass"),
-        Location(name="water"),
-        Location(name="cave"),
-    ]
-    db.add_all(locations)
-    db.commit()
+        type1 = db.query(PokemonType).filter(PokemonType.name == type1_name).first()
+        type2 = db.query(PokemonType).filter(PokemonType.name == type2_name).first() if type2_name else None
 
-# retrieve families and location once after everything is added to session
-bulbizarre_family = db.query(PokemonFamily).filter_by(name=BULBI).first()
-roucoul_family = db.query(PokemonFamily).filter_by(name="Roucool").first()
-grass_location = db.query(Location).filter_by(name="grass").first()
-
-# append families
-for family in [bulbizarre_family, roucoul_family]:
-    print(f"Adding family {family.name} to location {grass_location.name}")
-    if family not in grass_location.families:
-        grass_location.families.append(family)
-
-# commit all changes at once
-db.commit()
+        family = db.query(PokemonFamily).filter(PokemonFamily.name == name).first()
+        if not family:
+            family = PokemonFamily(number=number, name=name)
+            db.add(family)
+            db.commit()
+            db.refresh(family)
+            for t in [type1, type2]:
+                if t:
+                    stmt = pokemonfamily_types.insert().values(family_id=family.id, type_id=t.id)
+                    db.execute(stmt)
+            db.commit()
 
 db.close()
 print("DB initialisée avec quelques Pokémon 🎉")
