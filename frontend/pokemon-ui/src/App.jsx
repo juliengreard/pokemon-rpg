@@ -10,6 +10,10 @@ function App() {
   const [team1, setTeam1] = useState([]);
   const [team2, setTeam2] = useState([]);
 
+  // 🔧 tweak these if you want them bigger/smaller
+  const TYPE_SIZE_MAIN = 72; // main card type icon width (logo + text)
+  const TYPE_SIZE_CARD = 48; // team card type icon width
+
   const fetchPokemon = async () => {
     try {
       const res = await axios.post("http://localhost:8000/pokemon/", {
@@ -19,7 +23,7 @@ function App() {
       const data = res.data;
 
       const poke = {
-        id: Date.now(), // unique id
+        id: Date.now(),
         name: data.family,
         image: `http://localhost:8000/images/${data.image}`,
         types: data.types || [],
@@ -38,33 +42,21 @@ function App() {
 
   const assignToTeam = (team) => {
     if (!pokemon) return;
-
-    if (team === 1) {
-      setTeam1([...team1, { ...pokemon, hp }]);
-    } else {
-      setTeam2([...team2, { ...pokemon, hp }]);
-    }
-
-    setPokemon(null); // clear central card
+    if (team === 1) setTeam1([...team1, { ...pokemon, hp }]);
+    else setTeam2([...team2, { ...pokemon, hp }]);
+    setPokemon(null);
   };
 
   const removeFromTeam = (team, id) => {
-    if (team === 1) {
-      setTeam1(team1.filter((p) => p.id !== id));
-    } else {
-      setTeam2(team2.filter((p) => p.id !== id));
-    }
+    if (team === 1) setTeam1(team1.filter((p) => p.id !== id));
+    else setTeam2(team2.filter((p) => p.id !== id));
   };
 
   const updateHp = (team, id, newHp) => {
     if (team === 1) {
-      setTeam1(
-        team1.map((p) => (p.id === id ? { ...p, hp: newHp } : p))
-      );
+      setTeam1(team1.map((p) => (p.id === id ? { ...p, hp: newHp } : p)));
     } else {
-      setTeam2(
-        team2.map((p) => (p.id === id ? { ...p, hp: newHp } : p))
-      );
+      setTeam2(team2.map((p) => (p.id === id ? { ...p, hp: newHp } : p)));
     }
   };
 
@@ -76,71 +68,83 @@ function App() {
         padding: "0.5rem",
         border: "2px solid #ddd",
         borderRadius: "8px",
-        width: "180px",
+        width: "200px",
         backgroundColor: "#f9f9f9",
         textAlign: "center",
         position: "relative",
       }}
     >
-      {/* Remove button */}
+      {/* centered X button */}
       <button
         onClick={() => removeFromTeam(team, poke.id)}
+        title="Remove"
+        aria-label="Remove Pokémon from team"
         style={{
           position: "absolute",
-          top: "4px",
-          right: "4px",
+          top: "6px",
+          right: "6px",
+          width: "28px",
+          height: "28px",
+          padding: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
           background: "red",
           color: "white",
           border: "none",
           borderRadius: "50%",
           cursor: "pointer",
-          width: "24px",
-          height: "24px",
+          fontSize: "18px",
+          fontWeight: 700,
+          lineHeight: 1,
         }}
       >
-        ✕
+        ×
       </button>
 
       {/* Level badge */}
       <div
         style={{
           position: "absolute",
-          top: "4px",
-          left: "4px",
+          top: "6px",
+          left: "6px",
           backgroundColor: "#4CAF50",
           color: "white",
-          padding: "2px 6px",
+          padding: "2px 8px",
           borderRadius: "12px",
-          fontSize: "0.8rem",
+          fontSize: "0.85rem",
           fontWeight: "bold",
         }}
       >
         Lv {poke.level}
       </div>
 
-      <h4>{poke.name}</h4>
+      <h4 style={{ marginTop: "0.75rem" }}>{poke.name}</h4>
       <img
         src={poke.image}
         alt={poke.name}
-        width="100"
+        width="120"
         style={{
           border: "2px solid #ccc",
           borderRadius: "8px",
           marginTop: "0.5rem",
         }}
       />
-      <div style={{ marginTop: "0.5rem" }}>
+
+      {/* bigger type icons (team card) */}
+      <div style={{ marginTop: "0.5rem", display: "flex", gap: "6px", justifyContent: "center", flexWrap: "wrap" }}>
         {poke.types.map((t, i) => (
           <img
             key={i}
             src={`http://localhost:8000/images/types/${t}.png`}
             alt={t}
             title={t}
-            width="25"
-            style={{ margin: "0 2px" }}
+            width={TYPE_SIZE_CARD}
+            style={{ objectFit: "contain", height: "auto" }}
           />
         ))}
       </div>
+
       <div style={{ marginTop: "0.5rem" }}>
         <label>HP: {poke.hp}</label>
         <input
@@ -170,7 +174,7 @@ function App() {
               border: "2px solid #ddd",
               borderRadius: "8px",
               display: "inline-block",
-              width: "250px",
+              width: "280px",
               backgroundColor: "#f9f9f9",
               position: "relative",
             }}
@@ -193,31 +197,32 @@ function App() {
             </div>
 
             {/* Name toggle */}
-            <button onClick={() => setShowName(!showName)}>
+            <button onClick={() => setShowName(!showName)} style={{ marginBottom: "0.5rem" }}>
               {showName ? "Hide Name" : "Show Name"}
             </button>
-            {showName && <h2>{pokemon.name}</h2>}
+            {showName && <h2 style={{ margin: "0.5rem 0" }}>{pokemon.name}</h2>}
 
             <img
               src={pokemon.image}
               alt={pokemon.name}
-              width="150"
+              width="170"
               style={{
                 border: "2px solid #ccc",
                 borderRadius: "8px",
-                marginTop: "1rem",
+                marginTop: "0.5rem",
               }}
             />
 
-            <div style={{ marginTop: "0.5rem" }}>
+            {/* bigger type icons (main card) */}
+            <div style={{ marginTop: "0.75rem", display: "flex", gap: "8px", justifyContent: "center", flexWrap: "wrap" }}>
               {pokemon.types.map((t, i) => (
                 <img
                   key={i}
                   src={`http://localhost:8000/images/types/${t}.png`}
                   alt={t}
                   title={t}
-                  width="40"
-                  style={{ margin: "0 5px" }}
+                  width={TYPE_SIZE_MAIN}
+                  style={{ objectFit: "contain", height: "auto" }}
                 />
               ))}
             </div>
@@ -237,10 +242,7 @@ function App() {
             {/* Assign buttons */}
             <div style={{ marginTop: "1rem" }}>
               <button onClick={() => assignToTeam(1)}>Assign to Team 1</button>
-              <button
-                onClick={() => assignToTeam(2)}
-                style={{ marginLeft: "0.5rem" }}
-              >
+              <button onClick={() => assignToTeam(2)} style={{ marginLeft: "0.5rem" }}>
                 Assign to Team 2
               </button>
             </div>
@@ -251,12 +253,12 @@ function App() {
       {/* Right side: Teams */}
       <div style={{ flex: 1 }}>
         <h2>Team 1</h2>
-        <div style={{ display: "flex", flexDirection: "row" }}>
+        <div style={{ display: "flex", flexDirection: "row", flexWrap: "nowrap", overflowX: "auto" }}>
           {team1.map((p) => renderCard(p, 1))}
         </div>
 
         <h2 style={{ marginTop: "2rem" }}>Team 2</h2>
-        <div style={{ display: "flex", flexDirection: "row" }}>
+        <div style={{ display: "flex", flexDirection: "row", flexWrap: "nowrap", overflowX: "auto" }}>
           {team2.map((p) => renderCard(p, 2))}
         </div>
       </div>
