@@ -5,6 +5,7 @@ from models import (
     Location,
     PokemonType,
     pokemonfamily_types,
+    PokemonEvolution,
 )
 
 from database import (
@@ -22,15 +23,15 @@ db = SessionLocal()
 # with columns: # (number),Name,Type 1,Type 2
 import csv
 
-with open("data/pokemon.csv", "r") as f:
+with open("data/pokemon_fr.csv", "r") as f:
     
     # first list of types
     types = set()
     reader = csv.DictReader(f)
     for row in reader:
-        types.add(row["Type 1"])
-        if row["Type 2"]:
-            types.add(row["Type 2"])
+        types.add(row["type"])
+        if row["type2"]:
+            types.add(row["type2"])
     # insert types in db if not exist
     existing_types = {t.name for t in db.query(PokemonType).all()}
     new_types = [PokemonType(name=t) for t in types if t not in existing_types]
@@ -43,9 +44,9 @@ with open("data/pokemon.csv", "r") as f:
     next(f)  # skip header
     for row in reader:
         number = int(row["#"])
-        name = row["Name"]
-        type1_name = row["Type 1"]
-        type2_name = row["Type 2"]
+        name = row["pokemon"]
+        type1_name = row["type"]
+        type2_name = row["type2"]
 
         type1 = db.query(PokemonType).filter(PokemonType.name == type1_name).first()
         type2 = db.query(PokemonType).filter(PokemonType.name == type2_name).first() if type2_name else None
@@ -64,7 +65,26 @@ with open("data/pokemon.csv", "r") as f:
                     stmt = pokemonfamily_types.insert().values(family_id=family.id, type_id=t.id)
                     db.execute(stmt)
             db.commit()
-            
+
+    # Finally the evolutions
+ 
+    f.seek(0)
+    next(f)  # skip header
+    for row in reader:
+        name = row["pokemon"]
+        evolution = row["evolution"]
+        if evolution:
+            level = 0
+            pokemon_from = db.query(PokemonFamily).filter(PokemonFamily.name == name).first()
+            pokemon_to = db.query(PokemonFamily).filter(PokemonFamily.name == evolution).first()
+            if pokemon_from and pokemon_to:
+                evolution = PokemonEvolution(
+                    from_type=pokemon_from.id,
+                    to_type=pokemon_to.id,
+                    level=level,
+                )
+                db.add(evolution)
+                db.commit()
 
 db.close()
 print("DB initialisée avec quelques Pokémon 🎉")

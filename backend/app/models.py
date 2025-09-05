@@ -25,6 +25,16 @@ pokemonfamily_types = Table(
     Column("type_id", Integer, ForeignKey("pokemon_types.id"), primary_key=True),
 )
 
+class PokemonEvolution(Base):
+    __tablename__ = "pokemon_evolutions"
+
+    id = Column(Integer, primary_key=True, index=True)  # required primary key
+    from_type = Column(Integer, ForeignKey("pokemon_families.id"))
+    to_type = Column(Integer, ForeignKey("pokemon_families.id"))
+    level = Column(Integer, default=0)
+    from_family = relationship("PokemonFamily", foreign_keys=[from_type])
+    to_family = relationship("PokemonFamily", foreign_keys=[to_type])
+
 class PokemonType(Base):
     __tablename__ = "pokemon_types"
 

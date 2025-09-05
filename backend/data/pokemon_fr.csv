@@ -1,0 +1,216 @@
+#,pokemon,type,type2,sous_evolution,evolution,mega_evolution,forme_normale,region,generation
+1,Bulbizarre,Plante,Poison,,Herbizarre,,,Kanto,1
+2,Herbizarre,Plante,Poison,Bulbizarre,Florizarre,,,Kanto,1
+3,Florizarre,Plante,Poison,Herbizarre,,Mega Florizarre,,Kanto,1
+4,Salameche,Feu,,,Reptincel,,,Kanto,1
+5,Reptincel,Feu,,Salameche,Dracaufeu,,,Kanto,1
+6,Dracaufeu,Feu,Vol,Reptincel,,Mega Dracaufeu,,Kanto,1
+7,Carapuce,Eau,,,Carabaffe,,,Kanto,1
+8,Carabaffe,Eau,,Carapuce,Tortank,,,Kanto,1
+9,Tortank,Eau,,Carabaffe,,Mega Tortank,,Kanto,1
+10,Chenipan,Insecte,,,Chrysacier,,,Kanto,1
+11,Chrysacier,Insecte,,Chenipan,Papilusion,,,Kanto,1
+12,Papilusion,Insecte,Vol,Chrysacier,,,,Kanto,1
+13,Aspicot,Insecte,Poison,,Coconfort,,,Kanto,1
+14,Coconfort,Insecte,Poison,Aspicot,Dardargnan,,,Kanto,1
+15,Dardargnan,Insecte,Poison,Coconfort,,Mega Dardargnan,,Kanto,1
+16,Roucool,Normal,Vol,,Roucoups,,,Kanto,1
+17,Roucoups,Normal,Vol,Roucool,Roucarge,,,Kanto,1
+18,Roucarge,Normal,Vol,Roucoups,,Mega Roucarnage,,Kanto,1
+19,Rattata,Normal,,,Rattatac,,,Kanto,1
+20,Rattatac,Normal,,Rattata,Rattatac,,,Kanto,1
+21,Piafabec,Normal,Vol,,Rapasdepic,,,Kanto,1
+22,Rapasdepic,Normal,Vol,Piafabec,,,,Kanto,1
+23,Abo,Poison,,,Arbok,,,Kanto,1
+24,Arbok,Poison,,Abo,,,,Kanto,1
+25,Pikachu,Electrik,,Pichu,Raichu,,,Kanto,1
+26,Raichu,Electrik,,Pikachu,,,,Kanto,1
+27,Sabelette,Sol,,,Sablaireau,,,Kanto,1
+28,Sablaireau,Sol,,Sabelette,,,,Kanto,1
+29,Nidoran_femelle,Poison,,,Nidorina,,,Kanto,1
+30,Nidorina,Poison,,Nidoran_femelle,Nidoqueen,,,Kanto,1
+31,Nidoqueen,Poison,Sol,Nidorina,,,,Kanto,1
+32,Nidoran_male,Poison,,,Nidorino,,,Kanto,1
+33,Nidorino,Poison,,Nidoran_male,Nidoking,,,Kanto,1
+34,Nidoking,Poison,Sol,Nidorino,,,,Kanto,1
+35,Melofee,Fee,,Melo,Melodelfe,,,Kanto,1
+36,Melodelfe,Fee,,Melofee,,,,Kanto,1
+37,Goupix,Feu,,,Feunard,,,Kanto,1
+38,Feunard,Feu,,Goupix,,,,Kanto,1
+39,Rondoudou,Normal,Fee,Toudoudou,Grodoudou,,,Kanto,1
+40,Grodoudou,Normal,Fee,Rondoudou,,,,Kanto,1
+41,Nosferapti,Poison,Vol,,Nosferalto,,,Kanto,1
+42,Nosferalto,Poison,Vol,Nosferapti,Nostenfer,,,Kanto,1
+43,Mystherbe,Plante,Poison,,Ortide,,,Kanto,1
+44,Ortide,Plante,Poison,Mystherbe,Rafflesia,,,Kanto,1
+45,Rafflesia,Plante,Poison,Ortide,,,,Kanto,1
+46,Paras,Insecte,Plante,,Parasect,,,Kanto,1
+47,Parasect,Insecte,Plante,Paras,,,,Kanto,1
+48,Mimitoss,Insecte,Poison,,Aeromite,,,Kanto,1
+49,Aeromite,Insecte,Poison,Mimitoss,,,,Kanto,1
+50,Taupiqueur,Sol,,,Triopikeur,,,Kanto,1
+51,Triopikeur,Sol,,Taupiqueur,,,,Kanto,1
+52,Miaouss,Normal,,,Persian,,,Kanto,1
+53,Persian,Normal,,Miaouss,,,,Kanto,1
+54,Psykokwak,Eau,,,Akwakwak,,,Kanto,1
+55,Akwakwak,Eau,,Psykokwak,,,,Kanto,1
+56,Ferosinge,Combat,,,Colossinge,,,Kanto,1
+57,Colossinge,Combat,,Ferosinge,,,,Kanto,1
+58,Caninos,Feu,,,Arcanin,,,Kanto,1
+59,Arcanin,Feu,,Caninos,,,,Kanto,1
+60,Ptitard,Eau,,,Tetarte,,,Kanto,1
+61,Tetarte,Eau,,Ptitard,Tartard,,,Kanto,1
+62,Tartard,Eau,Combat,Tetarte,,,,Kanto,1
+63,Abra,Psy,,,Kadabra,,,Kanto,1
+64,Kadabra,Psy,,Abra,Alakazam,,,Kanto,1
+65,Alakazam,Psy,,Kadabra,,Mega Alakazam,,Kanto,1
+66,Machoc,Combat,,,Machopeur,,,Kanto,1
+67,Machopeur,Combat,,Machoc,Mackogneur,,,Kanto,1
+68,Mackogneur,Combat,,Machopeur,,,,Kanto,1
+69,Chetiflor,Plante,Poison,,Boustiflor,,,Kanto,1
+70,Boustiflor,Plante,Poison,Chetiflor,Empiflor,,,Kanto,1
+71,Empiflor,Plante,Poison,Boustiflor,,,,Kanto,1
+72,Tentacool,Eau,Poison,,Tentacruel,,,Kanto,1
+73,Tentacruel,Eau,Poison,Tentacool,,,,Kanto,1
+74,Racaillou,Roche,Sol,,Gravalanch,,,Kanto,1
+75,Gravalanch,Roche,Sol,Racaillou,Grolem,,,Kanto,1
+76,Grolem,Roche,Sol,Gravalanch,,,,Kanto,1
+77,Ponyta,Feu,,,Galopa,,,Kanto,1
+78,Galopa,Feu,,Ponyta,,,,Kanto,1
+79,Ramoloss,Eau,Psy,,Flagadoss,,,Kanto,1
+80,Flagadoss,Eau,Psy,Ramoloss,,Mega Flagadoss,,Kanto,1
+81,Magneti,Electrik,,,Magneton,,,Kanto,1
+82,Magneton,Electrik,,Magneti,Magnezone,,,Kanto,1
+83,Canarticho,Normal,Vol,,,,,Kanto,1
+84,Doduo,Normal,Vol,,Dodrio,,,Kanto,1
+85,Dodrio,Normal,Vol,Doduo,,,,Kanto,1
+86,Otaria,Eau,,,Lamantine,,,Kanto,1
+87,Lamantine,Eau,Glace,Otaria,,,,Kanto,1
+88,Tadmorv,Poison,,,Grotadmorv,,,Kanto,1
+89,Grotadmorv,Poison,,Tadmorv,,,,Kanto,1
+90,Kokiyas,Eau,,,Crustabri,,,Kanto,1
+91,Crustabri,Eau,Glace,Kokiyas,,,,Kanto,1
+92,Fantominus,Spectre,Poison,,Spectrum,,,Kanto,1
+93,Spectrum,Spectre,Poison,Fantominus,Ectoplasma,,,Kanto,1
+94,Ectoplasma,Spectre,Poison,Spectrum,,Mega Ectoplasma,,Kanto,1
+95,Onix,Roche,Sol,,Steelix,,,Kanto,1
+96,Soporifik,Psy,,,Hypnomade,,,Kanto,1
+97,Hypnomade,Psy,,Soporifik,,,,Kanto,1
+98,Krabby,Eau,,,Krabboss,,,Kanto,1
+99,Krabboss,Eau,,Krabby,,,,Kanto,1
+100,Voltorbe,Electrik,,,Electrode,,,Kanto,1
+101,Electrode,Electrik,,Voltorbe,,,,Kanto,1
+102,Noeunoeuf,Plante,Psy,,Noadkoko,,,Kanto,1
+103,Noadkoko,Plante,Psy,Noeunoeuf,,,,Kanto,1
+104,Osselait,Sol,,,Ossatueur,,,Kanto,1
+105,Ossatueur,Sol,,Osselait,,,,Kanto,1
+106,Kicklee,Combat,,Debugant,,,,Kanto,1
+107,Tygnon,Combat,,Debugant,,,,Kanto,1
+108,Excelangue,Normal,,,,,,Kanto,1
+109,Smogo,Poison,,,Smogogo,,,Kanto,1
+110,Smogogo,Poison,,Smogo,,,,Kanto,1
+111,Rhinocorne,Sol,Roche,,Rhinoferos,,,Kanto,1
+112,Rhinoferos,Sol,Roche,Rhinocorne,Rhinastoc,,,Kanto,1
+113,Leveinard,Normal,,Ptiravi,Leuphorie,,,Kanto,1
+114,Saquedeneu,Plante,,,Bouldeneu,,,Kanto,1
+115,Kangourex,Normal,,,,Mega Kangourex,,Kanto,1
+116,Hypotrempe,Eau,,,Hypocean,,,Kanto,1
+117,Hypocean,Eau,,Hypotrempe,Hyporoi,,,Kanto,1
+118,Poissirene,Eau,,,Poissiroy,,,Kanto,1
+119,Poissiroy,Eau,,Poissirene,,,,Kanto,1
+120,Stari,Eau,,,Staross,,,Kanto,1
+121,Staross,Eau,Psy,Stari,,,,Kanto,1
+122,M.Mime,Psy,,Mime Jr,,,,Kanto,1
+123,Insecateur,Insecte,Vol,,Cizayox,,,Kanto,1
+124,Lippoutou,Glace,Psy,Lippouti,,,,Kanto,1
+125,Elektek,Electrik,,Elekid,Elekable,,,Kanto,1
+126,Magmar,Feu,,Magby,Maganon,,,Kanto,1
+127,Scarabrute,Insecte,,,,Mega Scarabrute,,Kanto,1
+128,Tauros,Normal,,,,,,Kanto,1
+129,Magicarpe,Eau,,,Leviator,,,Kanto,1
+130,Leviator,Eau,Vol,Magicarpe,,Mega Leviator,,Kanto,1
+131,Lokhlass,Eau,Glace,,,,,Kanto,1
+132,Metamorph,Normal,,,,,,Kanto,1
+133,Evoli,Normal,,,Aquali,,,Kanto,1
+134,Aquali,Eau,,Evoli,,,,Kanto,1
+135,Voltali,Electrik,,Evoli,,,,Kanto,1
+136,Pyroli,Feu,,Evoli,,,,Kanto,1
+137,Porygon,Normal,,,Porygon2,,,Kanto,1
+138,Amonita,Roche,Eau,,Amonistar,,,Kanto,1
+139,Amonistar,Roche,Eau,Amonita,,,,Kanto,1
+140,Kabuto,Roche,Eau,,Kabutops,,,Kanto,1
+141,Kabutops,Roche,Eau,Kabuto,,,,Kanto,1
+142,Ptera,Roche,Vol,,,Mega Ptera,,Kanto,1
+143,Ronflex,Normal,,Goinfrex,,,,Kanto,1
+144,Artikodin,Glace,Vol,,,,,Kanto,1
+145,Electhor,Electrik,Vol,,,,,Kanto,1
+146,Sulfura,Feu,Vol,,,,,Kanto,1
+147,Minidraco,Dragon,,,Draco,,,Kanto,1
+148,Draco,Dragon,,Minidraco,Dracolosse,,,Kanto,1
+149,Dracolosse,Dragon,Vol,Draco,,,,Kanto,1
+150,Mewtwo,Psy,,,,Mega Mewtwo,,Kanto,1
+151,Mew,Psy,,,,,,Kanto,1
+172,Pichu,Electrik,,,Pikachu,,,Johto,2
+196,Mentali,Psy,,Evoli,,,,Johto,2
+197,Noctali,Tenebres,,Evoli,,,,Johto,2
+470,Phyllali,Plante,,Evoli,,,,Sinnoh,4
+471,Givrali,Glace,,Evoli,,,,Sinnoh,4
+700,Nymphali,Fee,,Evoli,,,,Kalos,6
+238,Lippouti,Glace,Psy,,Lippoutou,,,Johto,2
+174,Toudoudou,Normal,Fee,,Rondoudou,,,Johto,2
+173,Melo,Fee,,,Melofee,,,Johto,2
+169,Nostenfer,Poison,Vol,Nosferalto,,,,Johto,2
+182,Joliflor,Plante,,Ortide,,,,Johto,2
+186,Tarpaud,Eau,,Tetarte,,,,Johto,2
+199,Roigada,Eau,Psy,Ramoloss,,,,Johto,2
+462,Magnezone,Electrik,Acier,Magneton,,,,Sinnoh,4
+208,Steelix,Acier,Sol,Onix,,Mega Steelix,,Johto,2
+236,Degubant,Combat,,,Kicklee,,,Johto,2
+237,Kapoera,Combat,,Debugant,,,,Johto,2
+464,Rhinastoc,Sol,Roche,Rhinoferos,,,,Sinnoh,4
+440,Ptiravi,Normal,,,Leveinard,,,Sinnoh,4
+242,Leuphorie,Normal,,Leveinard,,,,Johto,2
+465,Bouldeneu,Plante,,Saquedeneu,,,,Sinnoh,4
+230,Hyporoi,Eau,Dragon,Hypocean,,,,Johto,2
+439,Mime Jr,Psy,Fee,,M.Mime,,,Sinnoh,4
+212,Cizayox,Acier,Insecte,Insecateur,,Mega Cizayox,,Johto,2
+239,Elekid,Electrik,,,Elektek,,,Johto,2
+466,Elekable,Electrik,,Elektek,,,,Sinnoh,4
+240,Magby,Feu,,,Magmar,,,Johto,2
+467,Maganon,Feu,,Magmar,,,,Sinnoh,4
+233,Porygon2,Normal,,Porygon,Porygon Z,,,Johto,2
+474,Porygon Z,Normal,,Porygon2,,,,Sinnoh,4
+446,Goinfrex,Normal,,,Ronflex,,,Sinnoh,4
+19,Rattata d Alola,Normal,Tenebres,,Rattatac d Alola,,Rattata,Alola,7
+20,Rattatac d Alola,Normal,Tenebres,Rattata d Alola,,,Rattatac,Alola,7
+26,Raichu d Alola,Electrik,Psy,,,,Raichu,Alola,7
+27,Sabelette d Alola,Glace,Acier,,Sablaireau d Alola,,Sabelette,Alola,7
+28,Sablaireau d Alola,Glace,Acier,Sabelette d Alola,,,Sablaireau,Alola,7
+37,Goupix d Alola,Glace,,,Feunard d Alola,,Goupix,Alola,7
+38,Feunard d Alola,Glace,Fee,Goupix d Alola,,,Feunard,Alola,7
+50,Taupiqueur d Alola,Sol,Acier,,Triopikeur d Alola,,Taupiqueur,Alola,7
+51,Triopikeur d Alola,Sol,Acier,Taupiqueur d Alola,,,Triopikeur,Alola,7
+52,Miaouss de Galar,Acier,,,,,Miaouss,Galar,8
+52,Miaouss d Alola,Tenebres,,,Persian d Alola,,Miaouss,Alola,7
+53,Persian d Alola,Tenebres,,Miaouss d Alola,,,Persian,Alola,7
+58,Caninos de Hisui,Feu,Roche,,Acarnin de Hisui,,Caninos,Galar,8
+59,Acarnin de Hisui,Feu,Roche,Caninos de Hisui,,,Acarnin,Galar,8
+74,Racaillou d Alola,Roche,Electrik,,Gravalanch d Alola,,Racaillou,Alola,7
+75,Gravalanch d Alola,Roche,Electrik,Racaillou d Alola,Grolem d Alola,,Gravalanch,Alola,7
+76,Grolem d Alola,Roche,Electrik,Gravalanch d Alola,,,Grolem,Alola,7
+77,Ponyta de Galar,Psy,,,Galopa de Galar,,Ponyta,Galar,8
+78,Galopa de Galar,Psy,Fee,Ponyta de Galar,,,Galopa,Galar,8
+79,Ramoloss de Galar,Psy,,,Flagadoss de Galar,,Ramoloss,Galar,8
+80,Flagadoss de Galar,Poison,Psy,Ramoloss de Galar,,,Flagadoss,Galar,8
+83,Canarticho de Galar,Combat,,,,,Canarticho,Galar,8
+88,Tadmorv d Alola,Poison,Tenebres,,Grotadmorv d Alola,,Tadmorv,Alola,7
+89,Grotadmorv d Alola,Poison,Tenebres,Tadmorv d Alola,,,Grotadmorv,Alola,7
+100,Voltorbe de Hisui,Electrik,Plante,,Electrode de Hisui,,Voltorbe,Galar,8
+101,Electrode de Hisui,Electrik,Plante,Voltorbe de Hisui,,,Electrode,Galar,8
+103,Noadkoko d Alola,Plante,Dragon,,,,Noadkoko,Alola,7
+105,Ossatueur d Alola,Feu,Spectre,,,,Ossatueur,Alola,7
+110,Smogogo de Galar,Poison,Fee,,,,Smogogo,Galar,8
+122,M.Mime de Galar,Glace,Psy,,,,M.Mime,Galar,8
+144,Artikodin de Galar,Psy,Vol,,,,Artikodin,Galar,8
+145,Electhor de Galar,Combat,Vol,,,,Electhor,Galar,8
+146,Sulfura de Galar,Tenebres,Vol,,,,Sulfura,Galar,8

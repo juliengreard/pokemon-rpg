@@ -1,0 +1,8 @@
+- tests
+- mecanique de combats : IHM + backend
+- sauvegarde / chargement
+- création d'user avec des teams de pokemons
+- gestion des pokemons aléatoires: types, niveaux, stats et attaques => trouver des db
+- gestions des lieux et des spawns de pokemons
+- notion d'évolution à un certain niveau
+- notion d'attaques
