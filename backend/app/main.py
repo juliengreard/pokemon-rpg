@@ -87,10 +87,26 @@ def create_pokemon(data: schema.WildPokemonEncounter, db: Session = Depends(get_
     # family = possible_families[0]
     print("family", family.name)
     print("types", family.types)
+    
+    moves = []
+    # query types of moves available for this family
+    for t in family.types:
+        move = db.query(models.BaseMove).filter(models.BaseMove.type == t).first()
+        if move:
+            attack = move.minimal_power 
+            if attack > 0:
+                attack = move.minimal_power + (data.player_level - 1) * 10
+            moves.append(schema.Moves(
+                name=move.name,
+                type=t.name,
+                power=attack,
+                description=move.description
+            ))
     return schema.WildPokemon(
         family=family.name,
         level=data.player_level,
         hp=100,
         types = [t.name for t in family.types],
-        image = f"/pokemon/pokemon/{family.number}.png"
+        image = f"/pokemon/pokemon/{family.number}.png",
+        moves = moves
     )   

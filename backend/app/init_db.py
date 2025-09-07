@@ -88,3 +88,31 @@ with open("data/pokemon_fr.csv", "r") as f:
 
 db.close()
 print("DB initialisée avec quelques Pokémon 🎉")
+
+from models import BaseMove, Move
+# on crée les attaques "charge", "mini-queue" et "lance_flamme"
+normal_type = db.query(PokemonType).filter(PokemonType.name == "Normal").first()
+fire_type = db.query(PokemonType).filter(PokemonType.name == "Feu").first()
+
+moves = [
+    BaseMove(
+        name="charge",
+        description="Une attaque rapide",
+        minimal_power=40,
+        type_id=normal_type.id,
+    ),
+    BaseMove(
+        name="mini-queue",
+        description="Une attaque de type normal",
+        minimal_power=0,
+        type_id=normal_type.id,
+    ),
+    BaseMove(
+        name="lance_flamme",
+        description="Une puissante attaque de feu",
+        minimal_power=90,
+        type_id=fire_type.id,
+    ),
+]
+db.add_all(moves)
+db.commit()

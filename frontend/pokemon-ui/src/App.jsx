@@ -30,6 +30,7 @@ function App() {
         hp: data.hp,
         maxHp: data.hp,
         level: data.level || 1,
+        moves: data.moves || [], // ensure moves exists
       };
 
       setPokemon(poke);
@@ -42,8 +43,9 @@ function App() {
 
   const assignToTeam = (team) => {
     if (!pokemon) return;
-    if (team === 1) setTeam1([...team1, { ...pokemon, hp }]);
-    else setTeam2([...team2, { ...pokemon, hp }]);
+    const pokeToAdd = { ...pokemon, hp, moves: pokemon.moves || [] };
+    if (team === 1) setTeam1([...team1, pokeToAdd]);
+    else setTeam2([...team2, pokeToAdd]);
     setPokemon(null);
   };
 
@@ -74,7 +76,7 @@ function App() {
         position: "relative",
       }}
     >
-      {/* centered X button */}
+      {/* X button */}
       <button
         onClick={() => removeFromTeam(team, poke.id)}
         title="Remove"
@@ -131,8 +133,16 @@ function App() {
         }}
       />
 
-      {/* bigger type icons (team card) */}
-      <div style={{ marginTop: "0.5rem", display: "flex", gap: "6px", justifyContent: "center", flexWrap: "wrap" }}>
+      {/* Type icons */}
+      <div
+        style={{
+          marginTop: "0.5rem",
+          display: "flex",
+          gap: "6px",
+          justifyContent: "center",
+          flexWrap: "wrap",
+        }}
+      >
         {poke.types.map((t, i) => (
           <img
             key={i}
@@ -145,6 +155,7 @@ function App() {
         ))}
       </div>
 
+      {/* HP slider */}
       <div style={{ marginTop: "0.5rem" }}>
         <label>HP: {poke.hp}</label>
         <input
@@ -156,12 +167,64 @@ function App() {
           style={{ width: "100%", accentColor: "green" }}
         />
       </div>
+
+      {/* Moves */}
+      <div style={{ marginTop: "1rem", textAlign: "left" }}>
+        <h4 style={{ marginBottom: "0.5rem" }}>Moves:</h4>
+        {poke.moves.length > 0 ? (
+          <ul style={{ paddingLeft: "1rem" }}>
+            {poke.moves.map((move, idx) => (
+              <li
+                key={idx}
+                style={{
+                  marginBottom: "0.5rem",
+                  padding: "0.25rem",
+                  border: "1px solid #ccc",
+                  borderRadius: "6px",
+                  display: "flex",
+                  flexDirection: "column",
+                  backgroundColor: "#f0f0f0",
+                }}
+              >
+                <div
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "0.95rem",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                  }}
+                >
+                  <img
+                    src={`http://localhost:8000/images/types/${move.type}.png`}
+                    alt={move.type}
+                    width={32}
+                    style={{ objectFit: "contain", height: "auto" }}
+                  />
+                  {move.name} {move.power && `(Power: ${move.power})`}
+                </div>
+                <div
+                  style={{
+                    fontSize: "0.85rem",
+                    color: "#555",
+                    marginTop: "2px",
+                  }}
+                >
+                  {move.description}
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p style={{ fontStyle: "italic", color: "#888" }}>No moves available</p>
+        )}
+      </div>
     </div>
   );
 
   return (
     <div style={{ display: "flex", flexDirection: "row", padding: "1rem" }}>
-      {/* Left side: central controls */}
+      {/* Left: central controls */}
       <div style={{ flex: 1, textAlign: "center" }}>
         <h1>Pokémon RPG</h1>
         <button onClick={fetchPokemon}>Refresh</button>
@@ -197,7 +260,10 @@ function App() {
             </div>
 
             {/* Name toggle */}
-            <button onClick={() => setShowName(!showName)} style={{ marginBottom: "0.5rem" }}>
+            <button
+              onClick={() => setShowName(!showName)}
+              style={{ marginBottom: "0.5rem" }}
+            >
               {showName ? "Hide Name" : "Show Name"}
             </button>
             {showName && <h2 style={{ margin: "0.5rem 0" }}>{pokemon.name}</h2>}
@@ -213,8 +279,16 @@ function App() {
               }}
             />
 
-            {/* bigger type icons (main card) */}
-            <div style={{ marginTop: "0.75rem", display: "flex", gap: "8px", justifyContent: "center", flexWrap: "wrap" }}>
+            {/* Types */}
+            <div
+              style={{
+                marginTop: "0.75rem",
+                display: "flex",
+                gap: "8px",
+                justifyContent: "center",
+                flexWrap: "wrap",
+              }}
+            >
               {pokemon.types.map((t, i) => (
                 <img
                   key={i}
@@ -227,6 +301,7 @@ function App() {
               ))}
             </div>
 
+            {/* HP slider */}
             <div style={{ marginTop: "1rem" }}>
               <label>HP: {hp}</label>
               <input
@@ -239,10 +314,67 @@ function App() {
               />
             </div>
 
+            {/* Moves */}
+            <div style={{ marginTop: "1rem", textAlign: "left" }}>
+              <h4 style={{ marginBottom: "0.5rem" }}>Moves:</h4>
+              {pokemon.moves.length > 0 ? (
+                <ul style={{ paddingLeft: "1rem" }}>
+                  {pokemon.moves.map((move, idx) => (
+                    <li
+                      key={idx}
+                      style={{
+                        marginBottom: "0.5rem",
+                        padding: "0.25rem",
+                        border: "1px solid #ccc",
+                        borderRadius: "6px",
+                        display: "flex",
+                        flexDirection: "column",
+                        backgroundColor: "#f0f0f0",
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontWeight: "bold",
+                          fontSize: "0.95rem",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "6px",
+                        }}
+                      >
+                        <img
+                          src={`http://localhost:8000/images/types/${move.type}.png`}
+                          alt={move.type}
+                          width={32}
+                          style={{ objectFit: "contain", height: "auto" }}
+                        />
+                        {move.name} {move.power && `(Power: ${move.power})`}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: "0.85rem",
+                          color: "#555",
+                          marginTop: "2px",
+                        }}
+                      >
+                        {move.description}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p style={{ fontStyle: "italic", color: "#888" }}>
+                  No moves available
+                </p>
+              )}
+            </div>
+
             {/* Assign buttons */}
             <div style={{ marginTop: "1rem" }}>
               <button onClick={() => assignToTeam(1)}>Assign to Team 1</button>
-              <button onClick={() => assignToTeam(2)} style={{ marginLeft: "0.5rem" }}>
+              <button
+                onClick={() => assignToTeam(2)}
+                style={{ marginLeft: "0.5rem" }}
+              >
                 Assign to Team 2
               </button>
             </div>
@@ -253,12 +385,26 @@ function App() {
       {/* Right side: Teams */}
       <div style={{ flex: 1 }}>
         <h2>Team 1</h2>
-        <div style={{ display: "flex", flexDirection: "row", flexWrap: "nowrap", overflowX: "auto" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            flexWrap: "nowrap",
+            overflowX: "auto",
+          }}
+        >
           {team1.map((p) => renderCard(p, 1))}
         </div>
 
         <h2 style={{ marginTop: "2rem" }}>Team 2</h2>
-        <div style={{ display: "flex", flexDirection: "row", flexWrap: "nowrap", overflowX: "auto" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            flexWrap: "nowrap",
+            overflowX: "auto",
+          }}
+        >
           {team2.map((p) => renderCard(p, 2))}
         </div>
       </div>
