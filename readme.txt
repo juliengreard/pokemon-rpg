@@ -1,4 +1,3 @@
 docker compose run backend python app/init_db.py
 
-rocabot : db faux
-diancie : db faux
+1/ Gérer les pokemons de type "de galar" dans les images

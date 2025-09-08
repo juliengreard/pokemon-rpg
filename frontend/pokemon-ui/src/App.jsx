@@ -196,7 +196,7 @@ function App() {
                   }}
                 >
                   <img
-                    src={`http://localhost:8000/images/types/${move.type}.png`}
+                    src={`http://localhost:8000/images/types/move_${move.type}.png`}
                     alt={move.type}
                     width={32}
                     style={{ objectFit: "contain", height: "auto" }}
@@ -342,7 +342,7 @@ function App() {
                         }}
                       >
                         <img
-                          src={`http://localhost:8000/images/types/${move.type}.png`}
+                          src={`http://localhost:8000/images/types/move_${move.type}.png`}
                           alt={move.type}
                           width={32}
                           style={{ objectFit: "contain", height: "auto" }}

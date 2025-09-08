@@ -26,6 +26,13 @@ pokemon_instance_moves = Table(
     Column("move_id", Integer, ForeignKey("pokemon_move.id"), primary_key=True),
 )
 
+default_moves = Table(
+    "default_moves",
+    Base.metadata,
+    Column("type_id", Integer, ForeignKey("pokemon_types.id"), primary_key=True),
+    Column("move_id", Integer, ForeignKey("base_move.id"), primary_key=True),
+)
+
 # Evolution table
 class PokemonEvolution(Base):
     __tablename__ = "pokemon_evolutions"
@@ -96,3 +103,5 @@ class Move(Base):
     id = Column(Integer, primary_key=True, index=True)
     move_id = Column(Integer, ForeignKey("base_move.id"))
     additional_power = Column(Integer, nullable=True)
+
+
