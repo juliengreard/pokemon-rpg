@@ -90,6 +90,8 @@ const updateBattleMoves = async () => {
 
     const { pokemon1: updated1, pokemon2: updated2 } = res.data;
 
+    console.log("Received updated moves1:", updated1.moves);
+    console.log("Received updated moves2:", updated2.moves);
     // Only update the active Pokémon, NOT the team
     setActive1((prev) => ({ ...prev, moves: updated1.moves || [] }));
     setActive2((prev) => ({ ...prev, moves: updated2.moves || [] }));

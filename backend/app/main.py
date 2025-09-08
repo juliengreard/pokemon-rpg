@@ -137,7 +137,7 @@ def update_moves(req: UpdateMovesRequest):
 
     print("updating move 1")
     # ⚡ Here you implement logic, e.g. adjust power depending on opponent type
-    updated_moves = []
+    updated_moves1 = []
     print("Current moves:", req.pokemon1.moves)
     for move in req.pokemon1.moves:
         print("Updating move:", move.name)
@@ -145,26 +145,27 @@ def update_moves(req: UpdateMovesRequest):
         # Example: bonus if type matches
         if move.type in req.pokemon2.types:
             new_power += 10
-        updated_moves.append(Moves(
+        updated_moves1.append(Moves(
             name=move.name,
             type=move.type,
             power=new_power,
             description=move.description
         ))
-    returned_pokemon1.moves = updated_moves
+    returned_pokemon1.moves = updated_moves1
     print("Updated moves:", returned_pokemon1.moves)
 
+    updated_moves2 = []
     for move in req.pokemon2.moves:
         new_power = move.power or 0
         if move.type in req.pokemon1.types:
             new_power += 10
-        updated_moves.append(Moves(
+        updated_moves2.append(Moves(
             name=move.name,
             type=move.type,
             power=new_power,
             description=move.description
         ))
-    returned_pokemon2.moves = updated_moves
+    returned_pokemon2.moves = updated_moves2
     print("Updated moves:", returned_pokemon2.moves)
 
     return UpdateMovesResponse(pokemon1=returned_pokemon1, pokemon2=returned_pokemon2)
