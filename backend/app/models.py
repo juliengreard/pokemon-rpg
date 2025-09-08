@@ -93,7 +93,7 @@ class BaseMove(Base):
     name = Column(String, unique=True, index=True)
     type_id = Column(Integer, ForeignKey("pokemon_types.id"))
     description = Column(String)
-    minimal_power = Column(Integer, nullable=True)
+    minimal_power = Column(String, nullable=True)
     type = relationship("PokemonType")
 
 # Pokémon-specific move instance
@@ -102,6 +102,6 @@ class Move(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     move_id = Column(Integer, ForeignKey("base_move.id"))
-    additional_power = Column(Integer, nullable=True)
+    additional_power = Column(String, nullable=True)
 
 

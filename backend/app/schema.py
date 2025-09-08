@@ -8,7 +8,7 @@ class WildPokemonEncounter(BaseModel):
 class Moves(BaseModel):
     name: str
     type: str
-    power: int | None = None  # peut être nul
+    power: str | None = None  # peut être nul
     description: str
 
     class Config:

@@ -236,7 +236,7 @@ const setActivePokemon = (team, poke) => {
                     alt={m.type}
                     width={24}
                   />
-                  <strong>{m.name}</strong> {m.power && `(Power: ${m.power})`}
+                  <strong>{m.name}</strong> {m.power && `(${m.power})`}
                 </div>
                 <small>{m.description}</small>
               </li>
@@ -348,7 +348,7 @@ const setActivePokemon = (team, poke) => {
                           alt={m.type}
                           width={24}
                         />
-                        <strong>{m.name}</strong> {m.power && `(Power: ${m.power})`}
+                        <strong>{m.name}</strong> {m.power && `(${m.power})`}
                       </div>
                       <small>{m.description}</small>
                     </li>

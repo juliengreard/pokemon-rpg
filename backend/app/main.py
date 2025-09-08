@@ -4,8 +4,6 @@ from fastapi import (
     HTTPException, 
     Query,
 )
-from sqlalchemy.orm import Session
-
 from app.database import (
     SessionLocal,
     engine,
@@ -15,14 +13,18 @@ from app import (
     schema,
 )
 import os
-from fastapi import FastAPI
+
+from pydantic import BaseModel
+from typing import List, Optional
+from app.schema import WildPokemon, Moves
+from sqlalchemy.orm import Session
+
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 
 # app = FastAPI()
 
 
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Pokemon RPG API")
 
@@ -94,8 +96,8 @@ def create_pokemon(data: schema.WildPokemonEncounter, db: Session = Depends(get_
         move = db.query(models.BaseMove).filter(models.BaseMove.type == t).first()
         if move:
             attack = move.minimal_power 
-            if attack > 0:
-                attack = move.minimal_power + (data.player_level - 1) * 10
+            if attack != "":
+                attack = move.minimal_power # add mechanism to improve power with level
             moves.append(schema.Moves(
                 name=move.name,
                 type=t.name,
@@ -103,23 +105,13 @@ def create_pokemon(data: schema.WildPokemonEncounter, db: Session = Depends(get_
                 description=move.description
             ))
     return schema.WildPokemon(
-        family=family.name,
-        level=data.player_level,
-        hp=100,
+        family = family.name,
+        level = data.player_level,
+        hp = 15,
         types = [t.name for t in family.types],
         image = f"/pokemon/pokemon/{family.number}.png",
         moves = moves
     )   
-
-
-
-
-
-from fastapi import FastAPI
-from pydantic import BaseModel
-from typing import List, Optional
-from app.schema import WildPokemon, Moves
-
 
 class UpdateMovesRequest(BaseModel):
     pokemon1: WildPokemon
@@ -143,8 +135,7 @@ def update_moves(req: UpdateMovesRequest):
         print("Updating move:", move.name)
         new_power = move.power or 0
         # Example: bonus if type matches
-        if move.type in req.pokemon2.types:
-            new_power += 10
+        new_power = get_power_for_type(move.power, move.type, req.pokemon2.types)
         updated_moves1.append(Moves(
             name=move.name,
             type=move.type,
@@ -157,8 +148,8 @@ def update_moves(req: UpdateMovesRequest):
     updated_moves2 = []
     for move in req.pokemon2.moves:
         new_power = move.power or 0
-        if move.type in req.pokemon1.types:
-            new_power += 10
+        
+        new_power = get_power_for_type(move.power, move.type, req.pokemon1.types)
         updated_moves2.append(Moves(
             name=move.name,
             type=move.type,
@@ -169,3 +160,68 @@ def update_moves(req: UpdateMovesRequest):
     print("Updated moves:", returned_pokemon2.moves)
 
     return UpdateMovesResponse(pokemon1=returned_pokemon1, pokemon2=returned_pokemon2)
+
+def get_power_for_type(current_power: str, move_type: str, opponent_types: List[str]) -> int:
+    
+    DOUBLE = "double"
+    NO_EFFECT = "no_effect"
+    DIVIDE = "divide"
+
+    FEU = "Feu"
+    EAU = "Eau"
+    PLANTE = "Plante"
+    ELECTRIK = "Electrik"
+    GLACE = "Glace"
+    NORMAL = "Normal"
+    FEE = "Fee"
+    COMBAT = "Combat"
+    POISON = "Poison"
+    SOL = "Sol"
+    VOL = "Vol"
+    PSY = "Psy"
+    INSECT = "Insecte"
+    ROCHE = "Roche"
+    SPECTRE = "Spectre"
+    TENEBRES = "Tenebres"
+    DRAGON = "Dragon"
+    ACIER = "Acier"
+
+    effectiveness = {
+        FEU: {PLANTE: DOUBLE, EAU: DIVIDE, FEU: DIVIDE, GLACE: DIVIDE, INSECT: DOUBLE, ROCHE: DIVIDE, DRAGON: DIVIDE},
+        EAU: {FEU: DOUBLE, EAU: DIVIDE, PLANTE: DIVIDE, GLACE: DIVIDE, SOL: DOUBLE, DRAGON: DIVIDE},
+        PLANTE: {EAU: DOUBLE, FEU: DIVIDE, PLANTE: DIVIDE, GLACE: DIVIDE, SOL: DOUBLE, VOL: DIVIDE, INSECT: DIVIDE, POISON: DIVIDE, DRAGON: DIVIDE, ACIER: DIVIDE},
+        ELECTRIK: {EAU: DOUBLE, PLANTE: DIVIDE, ELECTRIK: DIVIDE, SOL: NO_EFFECT, VOL: DOUBLE, DRAGON: DIVIDE},
+        GLACE: {PLANTE: DOUBLE, EAU: DOUBLE, FEU: DIVIDE, GLACE: DIVIDE, SOL: DOUBLE, VOL: DOUBLE, DRAGON: DOUBLE, ACIER: DIVIDE},
+        NORMAL: {ROCHE: DIVIDE, SPECTRE: NO_EFFECT, ACIER: DIVIDE},
+        FEE: {COMBAT: DOUBLE, DRAGON: DOUBLE, TENEBRES: DOUBLE, FEU: DIVIDE, POISON: DIVIDE, ACIER: DIVIDE},
+        COMBAT: {NORMAL: DOUBLE, GLACE: DOUBLE, ROCHE: DOUBLE, TENEBRES: DOUBLE, ACIER: DOUBLE, POISON: DIVIDE, VOL: DIVIDE, PSY: DIVIDE, FEE: DIVIDE},
+        POISON: {PLANTE: DOUBLE, FEE: DOUBLE, POISON: DIVIDE, SOL: DIVIDE, ROCHE: DIVIDE, SPECTRE: DIVIDE, ACIER: NO_EFFECT},
+        SOL: {FEU: DOUBLE, ELECTRIK: DOUBLE, POISON: DOUBLE, ROCHE: DOUBLE, INSECT: DIVIDE, PLANTE: DIVIDE, VOL: NO_EFFECT},
+        VOL: {PLANTE: DOUBLE, COMBAT: DOUBLE, INSECT: DOUBLE, ELECTRIK: DIVIDE, ROCHE: DIVIDE, ACIER: DIVIDE},
+        PSY: {COMBAT: DOUBLE, POISON: DOUBLE, PSY: DIVIDE, TENEBRES: NO_EFFECT, ACIER: DIVIDE},
+        INSECT: {PLANTE: DOUBLE, PSY: DOUBLE, TENEBRES: DOUBLE, FEU: DIVIDE, COMBAT: DIVIDE, POISON: DIVIDE, VOL: DIVIDE, ACIER: DIVIDE, FEE: DIVIDE},
+        ROCHE: {FEU: DOUBLE, GLACE: DOUBLE, VOL: DOUBLE, INSECT: DOUBLE, COMBAT: DIVIDE, SOL: DIVIDE, ACIER: DIVIDE},
+        SPECTRE: {PSY: DOUBLE, TENEBRES: DOUBLE, NORMAL: NO_EFFECT, COMBAT: NO_EFFECT, POISON: DIVIDE},
+        TENEBRES: {PSY: DOUBLE, SPECTRE: DOUBLE, COMBAT: DIVIDE, TENEBRES: DIVIDE, FEE: DIVIDE},
+        DRAGON: {DRAGON: DOUBLE, ACIER: DIVIDE, FEE: NO_EFFECT},
+        ACIER: {GLACE: DOUBLE, ROCHE: DOUBLE, FEE: DOUBLE, FEU: DIVIDE, EAU: DIVIDE, ELECTRIK: DIVIDE, ACIER: DIVIDE},
+    }
+    
+    modifier = 1
+
+    print("Calculating power for move type", move_type, "against opponent types", opponent_types)
+    print("Current power:", current_power)
+    for o_type in opponent_types:
+        if move_type in effectiveness and o_type in effectiveness[move_type]:
+            effect = effectiveness[move_type][o_type]
+            if effect == DOUBLE:
+                modifier *= 2
+            elif effect == DIVIDE:
+                modifier *= 0.5
+            elif effect == NO_EFFECT:
+                modifier *= 0
+
+    current_power, dice_value = current_power.split("d") if current_power and "d" in current_power else (current_power, None)
+    result = f"{int(current_power) * modifier}d{dice_value}"
+    print("New power:", result)
+    return result
