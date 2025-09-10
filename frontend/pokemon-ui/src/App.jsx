@@ -31,6 +31,7 @@ function App() {
         image: `http://localhost:8000/images/${data.image}`,
         types: data.types || [],
         hp: data.hp,
+        maxHp: data.hp,
         level: data.level || 1,
         moves: data.moves || [],
       };
@@ -54,56 +55,55 @@ function App() {
     }
   };
 
-// Call whenever active Pokémon change
+  // Call whenever active Pokémon change
+  const lastBattlePairRef = useRef({ id1: null, id2: null });
 
-const lastBattlePairRef = useRef({ id1: null, id2: null });
+  useEffect(() => {
+    if (!active1 || !active2) return;
 
-useEffect(() => {
-  if (!active1 || !active2) return;
+    // Only call if this pair is different from last call
+    if (
+      lastBattlePairRef.current.id1 === active1.id &&
+      lastBattlePairRef.current.id2 === active2.id
+    ) {
+      return; // same pair, skip
+    }
 
-  // Only call if this pair is different from last call
-  if (
-    lastBattlePairRef.current.id1 === active1.id &&
-    lastBattlePairRef.current.id2 === active2.id
-  ) {
-    return; // same pair, skip
-  }
+    lastBattlePairRef.current = { id1: active1.id, id2: active2.id };
 
-  lastBattlePairRef.current = { id1: active1.id, id2: active2.id };
+    // Call the backend
+    updateBattleMoves();
+  }, [active1, active2]);
 
-  // Call the backend
-  updateBattleMoves();
-}, [active1, active2]);
+  const updateBattleMoves = async () => {
+    if (!active1 || !active2) return;
 
+    // Use original Pokémon from the teams (not the modified active ones)
+    const original1 = team1.find((p) => p.id === active1.id);
+    const original2 = team2.find((p) => p.id === active2.id);
 
-const updateBattleMoves = async () => {
-  console.log("Updating battle moves...");
-  console.log("Active1:", active1);
-  console.log("Active2:", active2);
-  if (!active1 || !active2) return;
+    if (!original1 || !original2) return;
 
-  try {
-    const res = await axios.post("http://localhost:8000/battle/update_moves", {
-      pokemon1: active1,
-      pokemon2: active2,
-    });
+    try {
+      const res = await axios.post("http://localhost:8000/battle/update_moves", {
+        pokemon1: original1,
+        pokemon2: original2,
+      });
 
-    const { pokemon1: updated1, pokemon2: updated2 } = res.data;
+      const { pokemon1: updated1, pokemon2: updated2 } = res.data;
 
-    console.log("Received updated moves1:", updated1.moves);
-    console.log("Received updated moves2:", updated2.moves);
-    // Only update the active Pokémon, NOT the team
-    setActive1((prev) => ({ ...prev, moves: updated1.moves || [] }));
-    setActive2((prev) => ({ ...prev, moves: updated2.moves || [] }));
-  } catch (err) {
-    console.error("Failed to update battle moves:", err);
-  }
-};
+      // Update only the active Pokémon moves
+      setActive1((prev) => ({ ...prev, moves: updated1.moves || [] }));
+      setActive2((prev) => ({ ...prev, moves: updated2.moves || [] }));
+    } catch (err) {
+      console.error("Failed to update battle moves:", err);
+    }
+  };
 
   // --- team handling ---
   const assignToTeam = (team) => {
     if (!pokemon) return;
-    const pokeToAdd = { ...pokemon, hp, moves: pokemon.moves || [] };
+    const pokeToAdd = { ...pokemon, hp, maxHp: pokemon.hp, moves: pokemon.moves || [] };
     if (team === 1) setTeam1([...team1, pokeToAdd]);
     else setTeam2([...team2, pokeToAdd]);
     setPokemon(null);
@@ -119,11 +119,10 @@ const updateBattleMoves = async () => {
     }
   };
 
-const setActivePokemon = (team, poke) => {
-  if (team === 1) setActive1(poke);
-  else setActive2(poke);
-};
-
+  const setActivePokemon = (team, poke) => {
+    if (team === 1) setActive1({ ...poke, moves: [] }); // reset moves
+    else setActive2({ ...poke, moves: [] }); // reset moves
+  };
 
   // --- render cards ---
   const renderCard = (poke, team, selectable = true, inBattle = false) => (
@@ -202,6 +201,17 @@ const setActivePokemon = (team, poke) => {
       <div style={{ marginTop: "0.5rem" }}>
         <label>HP: {poke.hp}</label>
         {inBattle ? (
+          // Editable in battle
+          <input
+            type="range"
+            min="0"
+            max={poke.maxHp}
+            value={poke.hp}
+            onChange={(e) => updatePokemonHp(team, poke.id, Number(e.target.value))}
+            style={{ width: "100%", accentColor: "green" }}
+          />
+        ) : (
+          // Read-only in team
           <div style={{ background: "#ddd", height: "8px", borderRadius: "4px", overflow: "hidden" }}>
             <div
               style={{
@@ -211,15 +221,6 @@ const setActivePokemon = (team, poke) => {
               }}
             />
           </div>
-        ) : (
-          <input
-            type="range"
-            min="0"
-            max={poke.maxHp}
-            value={poke.hp}
-            onChange={(e) => updatePokemonHp(team, poke.id, Number(e.target.value))}
-            style={{ width: "100%", accentColor: "green" }}
-          />
         )}
       </div>
 
