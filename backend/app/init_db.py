@@ -22,6 +22,65 @@ db = SessionLocal()
 # the csv file is in data/pokemon.csv
 # with columns: # (number),Name,Type 1,Type 2
 import csv
+from typing import Tuple
+
+def get_regional_name_and_id(id : int, french_name : str) -> Tuple[int, str]:
+    
+    mapping = {
+        "19":  { "Alola" : "Alolan Rattata", },
+        "20":  { "Alola" : "Alolan Raticate", },
+        "26":  { "Alola" : "Alolan Raichu", },
+        "27":  { "Alola" : "Alolan Sandshrew", },
+        "28":  { "Alola" : "Alolan Sandslash", },
+        "37":  { "Alola" : "Alolan Vulpix", },
+        "38":  { "Alola" : "Alolan Ninetales", },
+        "50":  { "Alola" : "Alolan Diglett", },
+        "51":  { "Alola" : "Alolan Dugtrio", },
+        "52":  { "Galar" : "Galarian Meowth", "Alola" : "Alolan Meowth"},
+        "53":  { "Alola" : "Alolan Persian", },
+        "58":  { "Hisui" : "Hisuian Growlithe", },
+        "59":  { "Hisui" : "Hisuian Arcanine", },
+        "74":  { "Alola" : "Alolan Geodude", },
+        "75":  { "Alola" : "Alolan Graveler", },
+        "76":  { "Alola" : "Alolan Golem", },
+        "77":  { "Galar" : "Galarian Ponyta", },
+        "78":  { "Galar" : "Galarian Rapidash", },
+        "79":  { "Galar" : "Galarian Slowpoke", },
+        "80":  { "Galar" : "Galarian Slowbro", },
+        "83":  { "Galar" : "Galarian Farfetch’d", },
+        "88":  { "Alola" : "Alolan Grimer", },
+        "89":  { "Alola" : "Alolan Muk", },
+        "100": { "Hisui" : "Hisuian Voltorb", },
+        "101": { "Hisui" : "Hisuian Electrode", },
+        "103": { "Alola" : "Alolan Exeggutor", },
+        "105": { "Alola" : "Alolan Marowak", },
+        "110": { "Galar" : "Galarian Weezing", },
+        "122": { "Galar" : "Galarian Mr. Mime", },
+        "144": { "Galar" : "Galarian Articuno", },
+        "145": { "Galar" : "Galarian Zapdos", },
+        "146": { "Galar" : "Galarian Moltres", },
+    }
+
+    bonus_ids = {
+        "Alola": 5000,
+        "Galar": 6000,
+        "Hisui": 7000,
+    }
+    english_name = french_name
+    new_id = id
+    for key in bonus_ids:
+        if key in french_name:
+            new_id = int(id) + bonus_ids[key]
+            break
+    str_id = str(id)
+    if str_id in mapping:
+        for key in mapping[str_id]:
+            if key in french_name:
+                english_name = mapping[str_id][key]
+
+    print(f"Warning: no english name for {new_id} {french_name}")
+
+    return (new_id, english_name)
 
 with open("data/pokemon_fr.csv", "r") as f:
     
@@ -50,11 +109,41 @@ with open("data/pokemon_fr.csv", "r") as f:
 
         type1 = db.query(PokemonType).filter(PokemonType.name == type1_name).first()
         type2 = db.query(PokemonType).filter(PokemonType.name == type2_name).first() if type2_name else None
+        
+        # if number alreaydy in db, print name and skip
+        family = db.query(PokemonFamily).filter(PokemonFamily.number == number).first()
+        if family:
+            print(f"[{number}] {name}")
+            new_id, folder_name = get_regional_name_and_id(number, name)
+            if new_id != number:
+                print(f"  -> {new_id} {folder_name}")
+                family_regional = db.query(PokemonFamily).filter(PokemonFamily.number == new_id).first()
+                if not family_regional:
+                    family_regional = PokemonFamily(number=new_id, name=name)
+                    db.add(family_regional)
+                    db.commit()
+                    db.refresh(family_regional)
+                    for t in [type1, type2]:
+                        if t:
+                            stmt = pokemonfamily_types.insert().values(family_id=family_regional.id, type_id=t.id)
+                            db.execute(stmt)
+                    db.commit()
+                    # after creating the family, save the image associated
+                    import os
+                    import shutil
+                    folder = f"data/images/english/{folder_name}"
+                    if os.path.exists(folder):
+                        # find the image .png with "_new" in this folder and copy
+                        # it to images/pokemon/pokemon/{new_id}.png
+                        for file in os.listdir(folder):
+                            if file.endswith(".png") and "_new" in file:
+                                src = os.path.join(folder, file)
+                                dst = f"data/images/pokemon/pokemon/{new_id}.png"
+                                shutil.copyfile(src, dst)
+                                print(f"  -> copied image {src} to {dst}")
+                                break
 
-        print("Inserting family:", number, name, type1_name, type2_name)
-        print(" type1:", type1)
-        print(" type2:", type2) 
-        family = db.query(PokemonFamily).filter(PokemonFamily.name == name).first()
+            continue
         if not family:
             family = PokemonFamily(number=number, name=name)
             db.add(family)
@@ -87,7 +176,6 @@ with open("data/pokemon_fr.csv", "r") as f:
                 db.commit()
 
 db.close()
-print("DB initialisée avec quelques Pokémon 🎉")
 
 from models import BaseMove, Move
 # on crée les attaques "charge", "mini-queue" et "lance_flamme"
