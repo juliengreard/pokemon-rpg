@@ -1,3 +1,6 @@
+import os
+import shutil
+
 from models import (
     Base,
     PokemonFamily,
@@ -82,8 +85,18 @@ def get_regional_name_and_id(id : int, french_name : str) -> Tuple[int, str]:
 
     return (new_id, english_name)
 
+hps = {}
+with open("data/pokemon_en.csv", "r") as f:
+    # f.seek(0)
+    # next(f)  # skip header
+    reader = csv.DictReader(f)
+    for row in reader:
+        print(row)
+        number = int(row["#"])
+        hps[number] = int(row["PV"])
+
 with open("data/pokemon_fr.csv", "r") as f:
-    
+
     # first list of types
     types = set()
     reader = csv.DictReader(f)
@@ -106,6 +119,9 @@ with open("data/pokemon_fr.csv", "r") as f:
         name = row["pokemon"]
         type1_name = row["type"]
         type2_name = row["type2"]
+        hp = hps.get(number, 15)
+        # on divise hp par 3 pour avoir des pv liés à la mécanique de d6
+        hp = hp // 6
 
         type1 = db.query(PokemonType).filter(PokemonType.name == type1_name).first()
         type2 = db.query(PokemonType).filter(PokemonType.name == type2_name).first() if type2_name else None
@@ -119,7 +135,7 @@ with open("data/pokemon_fr.csv", "r") as f:
                 print(f"  -> {new_id} {folder_name}")
                 family_regional = db.query(PokemonFamily).filter(PokemonFamily.number == new_id).first()
                 if not family_regional:
-                    family_regional = PokemonFamily(number=new_id, name=name)
+                    family_regional = PokemonFamily(number=new_id, name=name, base_hp = hp)
                     db.add(family_regional)
                     db.commit()
                     db.refresh(family_regional)
@@ -129,8 +145,7 @@ with open("data/pokemon_fr.csv", "r") as f:
                             db.execute(stmt)
                     db.commit()
                     # after creating the family, save the image associated
-                    import os
-                    import shutil
+
                     folder = f"data/images/english/{folder_name}"
                     if os.path.exists(folder):
                         # find the image .png with "_new" in this folder and copy
@@ -145,7 +160,7 @@ with open("data/pokemon_fr.csv", "r") as f:
 
             continue
         if not family:
-            family = PokemonFamily(number=number, name=name)
+            family = PokemonFamily(number=number, name=name, base_hp=hp)
             db.add(family)
             db.commit()
             db.refresh(family)

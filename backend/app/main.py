@@ -104,10 +104,25 @@ def create_pokemon(data: schema.WildPokemonEncounter, db: Session = Depends(get_
                 power=attack,
                 description=move.description
             ))
+
+    
+    def compute_level(player_level: int) -> int:
+        import random
+        # Pokémon level is between player_level 1 and 100, gaussian distribution around player_level
+        level = int(random.gauss(player_level, 5))
+        if level < 1:
+            level = 1
+        if level > 100:
+            level = 100
+        return level
+    
+    pokemon_level = compute_level(data.player_level)
+
+
     return schema.WildPokemon(
         family = family.name,
-        level = data.player_level,
-        hp = 15,
+        level = pokemon_level,
+        hp = family.base_hp + pokemon_level,
         types = [t.name for t in family.types],
         image = f"/pokemon/pokemon/{family.number}.png",
         moves = moves

@@ -59,6 +59,7 @@ class PokemonFamily(Base):
     id = Column(Integer, primary_key=True, index=True)
     number = Column(Integer)  # Not necessarily unique
     name = Column(String, unique=True, index=True)
+    base_hp = Column(Integer, default=15)
 
     # Many-to-many relationships
     types = relationship("PokemonType", secondary=pokemonfamily_types)
