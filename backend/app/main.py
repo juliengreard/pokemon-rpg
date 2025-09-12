@@ -18,6 +18,7 @@ from pydantic import BaseModel
 from typing import List, Optional
 from app.schema import WildPokemon, Moves
 from sqlalchemy.orm import Session
+from sqlalchemy.sql.expression import func
 
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -71,7 +72,6 @@ def list_pokemons(db: Session = Depends(get_db)):
 @app.post("/pokemon/", response_model=schema.WildPokemon)
 def create_pokemon(data: schema.WildPokemonEncounter, db: Session = Depends(get_db)):
     
-    from sqlalchemy.sql.expression import func
     
     random_family = db.query(models.PokemonFamily).order_by(func.random()).first()
     family = random_family
@@ -224,8 +224,6 @@ def get_power_for_type(current_power: str, move_type: str, opponent_types: List[
     
     modifier = 1
 
-    print("Calculating power for move type", move_type, "against opponent types", opponent_types)
-    print("Current power:", current_power)
     for o_type in opponent_types:
         if move_type in effectiveness and o_type in effectiveness[move_type]:
             effect = effectiveness[move_type][o_type]
@@ -237,6 +235,11 @@ def get_power_for_type(current_power: str, move_type: str, opponent_types: List[
                 modifier *= 0
 
     current_power, dice_value = current_power.split("d") if current_power and "d" in current_power else (current_power, None)
-    result = f"{int(current_power) * modifier}d{dice_value}"
-    print("New power:", result)
+    
+    final_bonus = int(current_power) * modifier
+    if final_bonus.is_integer():
+        final_bonus = int(final_bonus)
+    result = f"{final_bonus}d{dice_value}"
+
+
     return result
