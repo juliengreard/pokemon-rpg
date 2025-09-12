@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 
 function App() {
   const [pokemon, setPokemon] = useState(null);
-  const [showName, setShowName] = useState(false);
   const [hp, setHp] = useState(0);
 
   // Teams & active Pokémon in battle
@@ -38,7 +37,6 @@ function App() {
 
       setPokemon(poke);
       setHp(poke.hp);
-      setShowName(false);
     } catch (err) {
       console.error(err);
     }
@@ -304,10 +302,7 @@ function App() {
               Lv {pokemon.level}
             </div>
 
-            <button onClick={() => setShowName(!showName)}>
-              {showName ? "Hide Name" : "Show Name"}
-            </button>
-            {showName && <h2>{pokemon.family}</h2>}
+            <h2>{pokemon.family}</h2>
 
             <img src={pokemon.image} alt={pokemon.family} width="170" />
 
