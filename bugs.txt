@@ -1,4 +1,3 @@
-2. Tous les pokemons ont le même nombre de pv
-3. Les hp ne peuvent pas être modifiés sur l'écran de bataille
-4. Les malus/bonus ne se mettent pas à jour quand on change de pokemon
 5. Pas d'empoisonnement
+6. Notion d'équipes
+7. Ajouts de tous les pokemons

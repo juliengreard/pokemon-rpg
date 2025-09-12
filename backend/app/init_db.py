@@ -86,24 +86,24 @@ def get_regional_name_and_id(id : int, french_name : str) -> Tuple[int, str]:
     return (new_id, english_name)
 
 hps = {}
-with open("data/pokemon_en.csv", "r") as f:
+with open("data/pokemon_stats_and_types.csv", "r") as f:
     # f.seek(0)
     # next(f)  # skip header
     reader = csv.DictReader(f)
     for row in reader:
         print(row)
         number = int(row["#"])
-        hps[number] = int(row["PV"])
+        hps[number] = int(row["HP"])
 
-with open("data/pokemon_fr.csv", "r") as f:
+with open("data/pokemon_stats_and_types.csv", "r") as f:
 
     # first list of types
     types = set()
     reader = csv.DictReader(f)
     for row in reader:
-        types.add(row["type"])
-        if row["type2"]:
-            types.add(row["type2"])
+        types.add(row["Type 1"])
+        if row["Type 2"]:
+            types.add(row["Type 2"])
     # insert types in db if not exist
     existing_types = {t.name for t in db.query(PokemonType).all()}
     new_types = [PokemonType(name=t) for t in types if t not in existing_types]
@@ -116,9 +116,9 @@ with open("data/pokemon_fr.csv", "r") as f:
     next(f)  # skip header
     for row in reader:
         number = int(row["#"])
-        name = row["pokemon"]
-        type1_name = row["type"]
-        type2_name = row["type2"]
+        name = row["Name"]
+        type1_name = row["Type 1"]
+        type2_name = row["Type 2"]
         hp = hps.get(number, 15)
         # on divise hp par 3 pour avoir des pv liés à la mécanique de d6
         hp = hp // 6
@@ -160,6 +160,7 @@ with open("data/pokemon_fr.csv", "r") as f:
 
             continue
         if not family:
+            print("inserting", number, name, type1_name, type2_name, hp)
             family = PokemonFamily(number=number, name=name, base_hp=hp)
             db.add(family)
             db.commit()
@@ -171,25 +172,46 @@ with open("data/pokemon_fr.csv", "r") as f:
             db.commit()
 
     # Finally the evolutions
- 
-    f.seek(0)
-    next(f)  # skip header
-    for row in reader:
-        name = row["pokemon"]
-        evolution = row["evolution"]
-        if evolution:
-            level = 0
+
+    with open("data/pokemon_evolutions.csv", "r") as f:
+        
+        # first list of types
+        reader = csv.DictReader(f)
+        for row in reader:
+            name = row["Pokemon"]
+            evolution = row["Evolution1"]
+            evolution2 = row["Evolution2"]
+
+
             pokemon_from = db.query(PokemonFamily).filter(PokemonFamily.name == name).first()
             pokemon_to = db.query(PokemonFamily).filter(PokemonFamily.name == evolution).first()
-            if pokemon_from and pokemon_to:
-                evolution = PokemonEvolution(
-                    from_type=pokemon_from.id,
-                    to_type=pokemon_to.id,
-                    level=level,
-                )
-                db.add(evolution)
-                db.commit()
 
+            pokemon_from_2 = pokemon_to
+            pokemon_to_2 = db.query(PokemonFamily).filter(PokemonFamily.name == evolution2).first() if evolution2 else None
+            
+            for (pokemon_from, pokemon_to) in [(pokemon_from, pokemon_to), (pokemon_from_2, pokemon_to_2)]:
+                level = 0
+                if pokemon_from and pokemon_to:
+                    # check if evolution already exists
+                    existing_evolution = db.query(PokemonEvolution).filter(
+                        PokemonEvolution.from_type == pokemon_from.id,
+                        PokemonEvolution.to_type == pokemon_to.id
+                    ).first()
+                    if existing_evolution:
+                        print(f"Evolution from {pokemon_from.name} to {pokemon_to.name} already exists, skipping")
+                        continue
+                    evolution_entry = PokemonEvolution(
+                        from_type=pokemon_from.id,
+                        to_type=pokemon_to.id,
+                        level=level,
+                    )
+                    db.add(evolution_entry)
+                    db.commit()
+                else:
+                    if not pokemon_from:
+                        print(f"Could not find pokemon {name} for evolution")
+                    if not pokemon_to:
+                        print(f"Could not find evolution {evolution} for pokemon {name}")
 db.close()
 
 from models import BaseMove, Move
@@ -213,8 +235,6 @@ psychic_type = db.query(PokemonType).filter(PokemonType.name == "Psy").first()
 dragon_type = db.query(PokemonType).filter(PokemonType.name == "Dragon").first()
 dark_type = db.query(PokemonType).filter(PokemonType.name == "Tenebres").first()
 steel_type = db.query(PokemonType).filter(PokemonType.name == "Acier").first()
-
-
 
 
 default_moves = [
