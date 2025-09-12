@@ -42,6 +42,30 @@ function App() {
     }
   };
 
+  // Load external team (Team 2)
+  const loadExternalTeam = async () => {
+    try {
+      const res = await axios.get("http://localhost:8000/loadTeam/");
+      const teamData = res.data;
+
+      const loadedTeam = teamData.map((p) => ({
+        id: Date.now() + Math.random(), // unique id
+        family: p.family,
+        image: `http://localhost:8000/images/${p.image}`,
+        types: p.types || [],
+        hp: p.hp,
+        maxHp: p.hp,
+        level: p.level || 1,
+        moves: p.moves || [],
+      }));
+
+      setTeam2(loadedTeam);
+      setActive2(null); // reset active if overwriting team
+    } catch (err) {
+      console.error("Failed to load external team:", err);
+    }
+  };
+
   // --- helpers ---
   const updatePokemonHp = (team, id, newHp) => {
     if (team === 1) {
@@ -59,24 +83,21 @@ function App() {
   useEffect(() => {
     if (!active1 || !active2) return;
 
-    // Only call if this pair is different from last call
     if (
       lastBattlePairRef.current.id1 === active1.id &&
       lastBattlePairRef.current.id2 === active2.id
     ) {
-      return; // same pair, skip
+      return;
     }
 
     lastBattlePairRef.current = { id1: active1.id, id2: active2.id };
 
-    // Call the backend
     updateBattleMoves();
   }, [active1, active2]);
 
   const updateBattleMoves = async () => {
     if (!active1 || !active2) return;
 
-    // Use original Pokémon from the teams (not the modified active ones)
     const original1 = team1.find((p) => p.id === active1.id);
     const original2 = team2.find((p) => p.id === active2.id);
 
@@ -90,7 +111,6 @@ function App() {
 
       const { pokemon1: updated1, pokemon2: updated2 } = res.data;
 
-      // Update only the active Pokémon moves
       setActive1((prev) => ({ ...prev, moves: updated1.moves || [] }));
       setActive2((prev) => ({ ...prev, moves: updated2.moves || [] }));
     } catch (err) {
@@ -118,8 +138,8 @@ function App() {
   };
 
   const setActivePokemon = (team, poke) => {
-    if (team === 1) setActive1({ ...poke, moves: [] }); // reset moves
-    else setActive2({ ...poke, moves: [] }); // reset moves
+    if (team === 1) setActive1({ ...poke, moves: [] });
+    else setActive2({ ...poke, moves: [] });
   };
 
   // --- render cards ---
@@ -137,7 +157,6 @@ function App() {
         position: "relative",
       }}
     >
-      {/* Remove button */}
       {!inBattle && (
         <button
           onClick={() => removeFromTeam(team, poke.id)}
@@ -163,7 +182,6 @@ function App() {
         </button>
       )}
 
-      {/* Level badge */}
       <div
         style={{
           position: "absolute",
@@ -188,18 +206,15 @@ function App() {
         style={{ border: "2px solid #ccc", borderRadius: "8px" }}
       />
 
-      {/* Types */}
       <div style={{ marginTop: "0.5rem", display: "flex", gap: "6px", justifyContent: "center" }}>
         {poke.types.map((t, i) => (
           <img key={i} src={`http://localhost:8000/images/types/${t}.png`} alt={t} width={TYPE_SIZE_CARD} />
         ))}
       </div>
 
-      {/* HP */}
       <div style={{ marginTop: "0.5rem" }}>
         <label>HP: {poke.hp}</label>
         {inBattle ? (
-          // Editable in battle
           <input
             type="range"
             min="0"
@@ -209,7 +224,6 @@ function App() {
             style={{ width: "100%", accentColor: "green" }}
           />
         ) : (
-          // Read-only in team
           <div style={{ background: "#ddd", height: "8px", borderRadius: "4px", overflow: "hidden" }}>
             <div
               style={{
@@ -222,7 +236,6 @@ function App() {
         )}
       </div>
 
-      {/* Moves */}
       <div style={{ marginTop: "1rem", textAlign: "left" }}>
         <h4 style={{ marginBottom: "0.5rem" }}>Moves:</h4>
         {poke.moves.length > 0 ? (
@@ -246,7 +259,6 @@ function App() {
         )}
       </div>
 
-      {/* Send to battle / Recall */}
       {!inBattle && selectable && (
         <div style={{ marginTop: "0.5rem" }}>
           <button onClick={() => setActivePokemon(team, poke)}>Send to Battle</button>
@@ -268,10 +280,12 @@ function App() {
 
   return (
     <div style={{ display: "flex", flexDirection: "row", padding: "1rem" }}>
-      {/* Left: wild Pokémon */}
       <div style={{ flex: 1, textAlign: "center" }}>
         <h1>Pokémon RPG</h1>
         <button onClick={fetchPokemon}>Refresh</button>
+        <button onClick={loadExternalTeam} style={{ marginLeft: "0.5rem" }}>
+          Load Team 2
+        </button>
 
         {pokemon && (
           <div
@@ -286,7 +300,6 @@ function App() {
               position: "relative",
             }}
           >
-            {/* Level */}
             <div
               style={{
                 position: "absolute",
@@ -306,7 +319,6 @@ function App() {
 
             <img src={pokemon.image} alt={pokemon.family} width="170" />
 
-            {/* Types */}
             <div style={{ marginTop: "0.75rem", display: "flex", gap: "8px", justifyContent: "center" }}>
               {pokemon.types.map((t, i) => (
                 <img
@@ -318,7 +330,6 @@ function App() {
               ))}
             </div>
 
-            {/* HP */}
             <div style={{ marginTop: "1rem" }}>
               <label>HP: {hp}</label>
               <input
@@ -331,7 +342,6 @@ function App() {
               />
             </div>
 
-            {/* Moves */}
             <div style={{ marginTop: "1rem", textAlign: "left" }}>
               <h4 style={{ marginBottom: "0.5rem" }}>Moves:</h4>
               {pokemon.moves.length > 0 ? (
@@ -365,7 +375,6 @@ function App() {
         )}
       </div>
 
-      {/* Right: Teams & Battle */}
       <div style={{ flex: 1 }}>
         <h2>Team 1</h2>
         <div style={{ display: "flex", overflowX: "auto" }}>

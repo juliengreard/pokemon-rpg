@@ -60,6 +60,36 @@ def root():
     return {"status": "ok"}
 
 
+@app.get("/loadTeam")
+def load_team(db: Session = Depends(get_db)):
+    # returns 6 randoms pokemons from the DB
+    # create them directly from pokemonfamilies
+
+    families = db.query(models.PokemonFamily).order_by(func.random()).limit(6).all()
+    team = []
+    for family in families:
+        level = 20  # for now fixed level
+        pokemon = {
+            "family": family.name,
+            "level": level,
+            "hp": family.base_hp + level,
+            "types": [t.name for t in family.types],
+            "image": f"/pokemon/pokemon/{family.number}.png",
+            "moves": []
+        }
+        # add some moves
+        for t in family.types:
+            move = db.query(models.BaseMove).filter(models.BaseMove.type == t).first()
+            if move:
+                pokemon["moves"].append({
+                    "name": move.name,
+                    "type": t.name,
+                    "power": move.minimal_power,
+                    "description": move.description
+                })
+        team.append(pokemon)
+    return team
+
 # Liste tous les pokémon (avec nom de famille)
 @app.get("/pokemons")
 def list_pokemons(db: Session = Depends(get_db)):
