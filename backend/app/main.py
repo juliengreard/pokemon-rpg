@@ -222,7 +222,7 @@ def get_power_for_type(current_power: str, move_type: str, opponent_types: List[
         ACIER: {GLACE: DOUBLE, ROCHE: DOUBLE, FEE: DOUBLE, FEU: DIVIDE, EAU: DIVIDE, ELECTRIK: DIVIDE, ACIER: DIVIDE},
     }
     
-    modifier = 1
+    modifier = 1.0
 
     for o_type in opponent_types:
         if move_type in effectiveness and o_type in effectiveness[move_type]:
