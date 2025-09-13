@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { useEffect, useRef } from "react";
 
 function App() {
   const [pokemon, setPokemon] = useState(null);
@@ -42,14 +41,14 @@ function App() {
     }
   };
 
-  // Load external team (Team 2)
-  const loadExternalTeam = async () => {
+  // Load a team from backend
+  const loadTeam = async (team) => {
     try {
-      const res = await axios.get("http://localhost:8000/loadTeam/");
+      const res = await axios.get(`http://localhost:8000/loadTeam/${team}`);
       const teamData = res.data;
 
       const loadedTeam = teamData.map((p) => ({
-        id: Date.now() + Math.random(), // unique id
+        id: Date.now() + Math.random(),
         family: p.family,
         image: `http://localhost:8000/images/${p.image}`,
         types: p.types || [],
@@ -59,10 +58,15 @@ function App() {
         moves: p.moves || [],
       }));
 
-      setTeam2(loadedTeam);
-      setActive2(null); // reset active if overwriting team
+      if (team === "team1") {
+        setTeam1(loadedTeam);
+        setActive1(null);
+      } else if (team === "team2") {
+        setTeam2(loadedTeam);
+        setActive2(null);
+      }
     } catch (err) {
-      console.error("Failed to load external team:", err);
+      console.error(`Failed to load ${team}:`, err);
     }
   };
 
@@ -77,7 +81,7 @@ function App() {
     }
   };
 
-  // Call whenever active Pokémon change
+  // Keep track of last battle pair
   const lastBattlePairRef = useRef({ id1: null, id2: null });
 
   useEffect(() => {
@@ -142,7 +146,7 @@ function App() {
     else setActive2({ ...poke, moves: [] });
   };
 
-  // --- render cards ---
+  // --- render card ---
   const renderCard = (poke, team, selectable = true, inBattle = false) => (
     <div
       key={poke.id}
@@ -283,7 +287,10 @@ function App() {
       <div style={{ flex: 1, textAlign: "center" }}>
         <h1>Pokémon RPG</h1>
         <button onClick={fetchPokemon}>Refresh</button>
-        <button onClick={loadExternalTeam} style={{ marginLeft: "0.5rem" }}>
+        <button onClick={() => loadTeam("team1")} style={{ marginLeft: "0.5rem" }}>
+          Load Team 1
+        </button>
+        <button onClick={() => loadTeam("team2")} style={{ marginLeft: "0.5rem" }}>
           Load Team 2
         </button>
 
@@ -368,8 +375,7 @@ function App() {
             <div style={{ marginTop: "1rem" }}>
               <button onClick={() => assignToTeam(1)}>Assign to Team 1</button>
               <button onClick={() => assignToTeam(2)} style={{ marginLeft: "0.5rem" }}>
-                Assign to Team 2
-              </button>
+                Assign to Team 2</button>
             </div>
           </div>
         )}
