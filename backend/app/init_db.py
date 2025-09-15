@@ -251,7 +251,7 @@ default_moves = [
         type_id=fire_type.id,
     ),
     BaseMove(
-        name="pistolet à eau",
+        name="pistolet à o",
         description="Une attaque d'eau",
         minimal_power="1d6",
         type_id=water_type.id,
@@ -346,37 +346,13 @@ default_moves = [
         minimal_power="1d6",
         type_id=combat_type.id,
     ),
-
-
-
-    spectre_type = db.query(PokemonType).filter(PokemonType.name == "Spectre").first()
-    ice_type = db.query(PokemonType).filter(PokemonType.name == "Glace").first()
-    fairy_type = db.query(PokemonType).filter(PokemonType.name == "Fee").first()
-    normal_type = db.query(PokemonType).filter(PokemonType.name == "Normal").first()
-    fire_type = db.query(PokemonType).filter(PokemonType.name == "Feu").first()
-    combat_type = db.query(PokemonType).filter(PokemonType.name == "Combat").first()
-    grass_type = db.query(PokemonType).filter(PokemonType.name == "Plante").first()
-    water_type = db.query(PokemonType).filter(PokemonType.name == "Eau").first()
-    electric_type = db.query(PokemonType).filter(PokemonType.name == "Electrik").first()
-    flying_type = db.query(PokemonType).filter(PokemonType.name == "Vol").first()
-    rock_type = db.query(PokemonType).filter(PokemonType.name == "Roche").first()
-    ground_type = db.query(PokemonType).filter(PokemonType.name == "Sol").first()
-    poison_type = db.query(PokemonType).filter(PokemonType.name == "Poison").first()
-    bug_type = db.query(PokemonType).filter(PokemonType.name == "Insecte").first()
-    psychic_type = db.query(PokemonType).filter(PokemonType.name == "Psy").first()
-    dragon_type = db.query(PokemonType).filter(PokemonType.name == "Dragon").first()
-    dark_type = db.query(PokemonType).filter(PokemonType.name == "Tenebres").first()
-    steel_type = db.query(PokemonType).filter(PokemonType.name == "Acier").first()
-
-    moves_to_create = []
-
-    tonnerre = BaseMove(
+    BaseMove(
         name="tonnerre",
         description="Une puissante attaque électrique",
         minimal_power="2d6",
         type_id=electric_type.id,
     ),
-    rafale_psy = BaseMove(
+    BaseMove(
         name="rafale psy",
         description="Une puissante attaque psychique",
         minimal_power="3d6",
@@ -400,12 +376,6 @@ default_moves = [
         minimal_power="2d20",
         type_id=fire_type.id,
     ),
-    BaseMove(
-        name="pistolet à o",
-        description="Une attaque d'eau",
-        minimal_power="3d6",
-        type_id=water_type.id,
-    )
 ]
 db.add_all(default_moves)
 db.commit()

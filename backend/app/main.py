@@ -85,7 +85,6 @@ def load_team1(db: Session = Depends(get_db)):
     furie = db.query(models.BaseMove).filter(models.BaseMove.name == "furie").first()
     pistolet_a_o = db.query(models.BaseMove).filter(models.BaseMove.name == "pistolet à o").first()
 
-    print("tonnerre type : ", tonnerre.type)
     return [
         {
             "family": pikachu.name,
@@ -172,13 +171,26 @@ def load_team1(db: Session = Depends(get_db)):
                 {
                     "name": pistolet_a_o.name,
                     "type": pistolet_a_o.type.name,
-                    "power": pistolet_a_o.minimal_power,
+                    "power": add_power(pistolet_a_o.minimal_power, "2d6"),
                     "description": pistolet_a_o.description
                 }
             ]
         }
 
     ]
+
+def add_power(power1: str, power2: str) -> str:
+    """ Adds two power strings of the form XdY """
+    if not power1 or not power2 or "d" not in power1 or "d" not in power2:
+        return power1  # cannot add, return first
+
+    num1, dice1 = power1.split("d")
+    num2, dice2 = power2.split("d")
+    if dice1 != dice2:
+        return power1  # cannot add different dice, return first
+
+    total_num = int(num1) + int(num2)
+    return f"{total_num}d{dice1}"
 
 @app.get("/loadTeam/team2")
 def load_team2(db: Session = Depends(get_db)):
