@@ -1,9 +1,8 @@
-from models import models
 from fastapi import (
     FastAPI,
 )
 
-from models.models import BaseMove, Move
+from models import BaseMove, Move, Base
 
 from database import (
     engine,
@@ -34,7 +33,7 @@ IMAGES_DIR = os.path.join(BASE_DIR, "data/images")
 app.mount("/images", StaticFiles(directory=IMAGES_DIR), name="images")
 
 # crée les tables si besoin
-models.Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 from routers import pokemon, team, battle
 

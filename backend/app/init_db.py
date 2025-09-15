@@ -1,7 +1,7 @@
 import os
 import shutil
 
-from models.models import (
+from models import (
     Base,
     PokemonFamily,
     Pokemon,
@@ -214,7 +214,7 @@ with open("data/pokemon_stats_and_types.csv", "r") as f:
                         print(f"Could not find evolution {evolution} for pokemon {name}")
 db.close()
 
-from models.models import BaseMove, Move
+from models import BaseMove, Move
 # on crée les attaques "charge", "mini-queue" et "lance_flamme"
 
 spectre_type = db.query(PokemonType).filter(PokemonType.name == "Spectre").first()
