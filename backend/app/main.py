@@ -83,7 +83,7 @@ def load_team1(db: Session = Depends(get_db)):
     deflagration = db.query(models.BaseMove).filter(models.BaseMove.name == "deflagration").first()
     rafale_psy = db.query(models.BaseMove).filter(models.BaseMove.name == "rafale psy").first()
     furie = db.query(models.BaseMove).filter(models.BaseMove.name == "furie").first()
-    pistole_a_o = db.query(models.BaseMove).filter(models.BaseMove.name == "pistole à o").first()
+    pistolet_a_o = db.query(models.BaseMove).filter(models.BaseMove.name == "pistolet à o").first()
 
     print("tonnerre type : ", tonnerre.type)
     return [
@@ -170,10 +170,10 @@ def load_team1(db: Session = Depends(get_db)):
             "image": f"/pokemon/pokemon/{carapuce.number}.png",
             "moves": [
                 {
-                    "name": pistole_a_o.name,
-                    "type": pistole_a_o.type.name,
-                    "power": pistole_a_o.minimal_power,
-                    "description": pistole_a_o.description
+                    "name": pistolet_a_o.name,
+                    "type": pistolet_a_o.type.name,
+                    "power": pistolet_a_o.minimal_power,
+                    "description": pistolet_a_o.description
                 }
             ]
         }

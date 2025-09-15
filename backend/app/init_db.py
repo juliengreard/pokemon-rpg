@@ -401,7 +401,7 @@ default_moves = [
         type_id=fire_type.id,
     ),
     BaseMove(
-        name="pistole à o",
+        name="pistolet à o",
         description="Une attaque d'eau",
         minimal_power="3d6",
         type_id=water_type.id,
