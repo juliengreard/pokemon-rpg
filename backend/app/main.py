@@ -1,18 +1,19 @@
 from fastapi import (
     FastAPI,
 )
-
-from models import BaseMove, Move, Base
-
-from database import (
-    engine,
-)
 import os
-
-from schemas import WildPokemon, Moves
-
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+
+
+from app.models import BaseMove, Move, Base
+
+from app.database import (
+    engine,
+)
+
+from app.schemas import WildPokemon, Moves
+from app.routers import pokemon, team, battle
 
 
 app = FastAPI(title="Pokemon RPG API")
@@ -35,7 +36,6 @@ app.mount("/images", StaticFiles(directory=IMAGES_DIR), name="images")
 # crée les tables si besoin
 Base.metadata.create_all(bind=engine)
 
-from routers import pokemon, team, battle
 
 app.include_router(pokemon.router, prefix="", tags=["pokemon"])
 app.include_router(team.router, prefix="", tags=["teams"])

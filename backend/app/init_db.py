@@ -11,7 +11,7 @@ from models import (
     PokemonEvolution,
 )
 
-from database import (
+from app.database import (
     engine,
     SessionLocal,
 )

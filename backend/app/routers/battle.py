@@ -1,7 +1,7 @@
 from fastapi import APIRouter
-from schemas import UpdateMovesRequest, UpdateMovesResponse
-from schemas import Moves
-from utils.power import get_power_for_type
+from app.schemas import UpdateMovesRequest, UpdateMovesResponse
+from app.schemas import Moves
+from app.utils.power import get_power_for_type
 
 router = APIRouter()
 
