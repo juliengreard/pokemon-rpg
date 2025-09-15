@@ -25,3 +25,12 @@ class WildPokemon(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class UpdateMovesRequest(BaseModel):
+    pokemon1: WildPokemon
+    pokemon2: WildPokemon
+
+class UpdateMovesResponse(BaseModel):
+    pokemon1: WildPokemon
+    pokemon2: WildPokemon
