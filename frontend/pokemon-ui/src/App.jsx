@@ -85,8 +85,20 @@ function App() {
   const lastBattlePairRef = useRef({ id1: null, id2: null });
 
   useEffect(() => {
-    if (!active1 || !active2) return;
 
+    if (!active1 || !active2)
+    {
+      if (!active1)
+      {
+        lastBattlePairRef.current.id1 = null;
+      }
+      if (!active2)
+      {
+        lastBattlePairRef.current.id2 = null;
+      }
+      return;
+    }
+    
     if (
       lastBattlePairRef.current.id1 === active1.id &&
       lastBattlePairRef.current.id2 === active2.id
@@ -100,11 +112,16 @@ function App() {
   }, [active1, active2]);
 
   const updateBattleMoves = async () => {
+    console.log("active1 : ", active1);
+    console.log("active2 : ", active2);
     if (!active1 || !active2) return;
 
     const original1 = team1.find((p) => p.id === active1.id);
     const original2 = team2.find((p) => p.id === active2.id);
 
+    console.log("original1 : ", original1);
+    console.log("original2 : ", original2);
+    
     if (!original1 || !original2) return;
 
     try {
