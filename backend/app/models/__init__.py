@@ -104,7 +104,8 @@ class BaseMove(Base):
     minimal_power = Column(String, nullable=True)
     type = relationship("PokemonType")
     status_effect_id = Column(Integer, ForeignKey("status_effects.id"), nullable=True)
-    status_effect_chance = Column(Integer, nullable=True)  # Percentage chance
+    status_effect_activation_chance = Column(String, nullable=True) # par exemple 1d6 <= 2
+    status_effect_deactivation_chance = Column(String, nullable=True) # par exemple 1d6 <= 5
 
     status_effect = relationship("StatusEffect")
 

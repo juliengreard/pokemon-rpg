@@ -11,7 +11,8 @@ class Moves(BaseModel):
     power: str | None = None  # peut être nul
     description: str
     status_effect: str | None = None
-    status_effect_chance: int | None = None  # en pourcentage
+    status_effect_activation_chance: str | None = None 
+    status_effect_deactivation_chance: str | None = None
 
     class Config:
         orm_mode = True

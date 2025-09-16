@@ -8,13 +8,13 @@ const STATUS_ICONS = {
   }
 };
 
-export default function StatusIcon({ effect, chance }) {
+export default function StatusIcon({ effect, text, onClick }) {
+  console.log("on click : ", onClick);
   const [hover, setHover] = useState(false);
 
   if (!effect || !STATUS_ICONS[effect]) return null;
 
   const { image, label, color } = STATUS_ICONS[effect];
-
   return (
     <div
       style={{
@@ -35,6 +35,7 @@ export default function StatusIcon({ effect, chance }) {
           border: `1px solid ${color}`,
           borderRadius: "4px",
         }}
+        onClick={onClick}
       />
       {hover && (
         <div
@@ -54,7 +55,7 @@ export default function StatusIcon({ effect, chance }) {
             zIndex: 10,
           }}
         >
-          {label}: {chance ? `${chance}% chance` : "applies"}
+          {label}: {text ? `${text}` : ""}
         </div>
       )}
     </div>

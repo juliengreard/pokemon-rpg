@@ -299,7 +299,8 @@ default_moves = [
         minimal_power="1d6",
         type_id=poison_type.id,
         status_effect_id=poison_effect.id,
-        status_effect_chance=30,  # 30% chance to poison
+        status_effect_activation_chance="1d6 <= 2",
+        status_effect_deactivation_chance="1d6 <= 5",
     ),
     BaseMove(
         name="lame de roc",

@@ -146,7 +146,8 @@ def load_team2(db: Session = Depends(get_db)):
                     "power": move.minimal_power,
                     "description": move.description,
                     "status_effect": move.status_effect.name if move.status_effect else None,
-                    "status_effect_chance": 30 if move.status_effect else None,
+                    "status_effect_activation_chance": move.status_effect_activation_chance if move.status_effect else None,
+                    "status_effect_deactivation_chance": move.status_effect_deactivation_chance if move.status_effect else None
                 })
         team.append(pokemon)
     return team

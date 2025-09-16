@@ -3,3 +3,5 @@ exercice:
 - en combat, si on clique sur cet icone, il est transmis au pokemon adverse
 - un pokemon adverse garde l'icone "enpoisonnement" sauf si on reclique dessus
 - en profiter pour factoriser un peu les 3 endroits où sont affichés un pokemon (wild, team, combat)
+
+- faire une v1 pour commencer à mettre en place des migrations de db
