@@ -11,7 +11,7 @@ from models import (
     PokemonEvolution,
 )
 
-from app.database import (
+from database import (
     engine,
     SessionLocal,
 )
@@ -214,7 +214,7 @@ with open("data/pokemon_stats_and_types.csv", "r") as f:
                         print(f"Could not find evolution {evolution} for pokemon {name}")
 db.close()
 
-from models import BaseMove, Move
+from models import BaseMove, Move, StatusEffect
 # on crée les attaques "charge", "mini-queue" et "lance_flamme"
 
 spectre_type = db.query(PokemonType).filter(PokemonType.name == "Spectre").first()
@@ -236,6 +236,19 @@ dragon_type = db.query(PokemonType).filter(PokemonType.name == "Dragon").first()
 dark_type = db.query(PokemonType).filter(PokemonType.name == "Tenebres").first()
 steel_type = db.query(PokemonType).filter(PokemonType.name == "Acier").first()
 
+
+statuses_effects = [
+    StatusEffect(name="Paralysie", description="Le Pokémon est paralysé et peut ne pas pouvoir attaquer."),
+    StatusEffect(name="Brulure", description="Le Pokémon est brûlé et subit des dégâts sur la durée."),
+    StatusEffect(name="Gel", description="Le Pokémon est gelé et ne peut pas attaquer."),
+    StatusEffect(name="Sommeil", description="Le Pokémon est endormi et ne peut pas attaquer."),
+    StatusEffect(name="Poison", description="Le Pokémon est empoisonné et subit des dégâts sur la durée."),
+    StatusEffect(name="Confusion", description="Le Pokémon est confus et peut s'attaquer lui-même."),
+]
+db.add_all(statuses_effects)
+db.commit()
+
+poison_effect = db.query(StatusEffect).filter(StatusEffect.name == "Poison").first()
 
 default_moves = [
     BaseMove(
@@ -285,6 +298,8 @@ default_moves = [
         description="Une attaque de type poison",
         minimal_power="1d6",
         type_id=poison_type.id,
+        status_effect_id=poison_effect.id,
+        status_effect_chance=30,  # 30% chance to poison
     ),
     BaseMove(
         name="lame de roc",

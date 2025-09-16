@@ -1,3 +1,5 @@
+
+import StatusIcon from "./components/StatusIcons";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
@@ -270,6 +272,9 @@ function App() {
                     width={24}
                   />
                   <strong>{m.name}</strong> {m.power && `(${m.power})`}
+                  {m.status_effect && (
+                   <StatusIcon effect={m.status_effect} chance={m.status_effect_chance} />
+                  )}
                 </div>
                 <small>{m.description}</small>
               </li>
@@ -379,7 +384,9 @@ function App() {
                           width={24}
                         />
                         <strong>{m.name}</strong> {m.power && `(${m.power})`}
-                      </div>
+                                        {m.status_effect && (
+                     <StatusIcon effect={m.status_effect} chance={m.status_effect_chance} />
+                  )}                      </div>
                       <small>{m.description}</small>
                     </li>
                   ))}

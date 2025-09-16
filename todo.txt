@@ -1,8 +1,5 @@
-- tests
-- mecanique de combats : IHM + backend
-- sauvegarde / chargement
-- création d'user avec des teams de pokemons
-- gestion des pokemons aléatoires: types, niveaux, stats et attaques => trouver des db
-- gestions des lieux et des spawns de pokemons
-- notion d'évolution à un certain niveau
-- notion d'attaques
+exercice: 
+- ajouter l'icone "enpoisonnement" à chaque attaque qui peut empoisonner
+- en combat, si on clique sur cet icone, il est transmis au pokemon adverse
+- un pokemon adverse garde l'icone "enpoisonnement" sauf si on reclique dessus
+- en profiter pour factoriser un peu les 3 endroits où sont affichés un pokemon (wild, team, combat)

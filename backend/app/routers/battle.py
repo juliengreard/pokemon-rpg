@@ -24,7 +24,9 @@ def update_moves(req: UpdateMovesRequest):
             name=move.name,
             type=move.type,
             power=new_power,
-            description=move.description
+            description=move.description,
+            status_effect=move.status_effect,
+            status_effect_chance=move.status_effect_chance
         ))
     returned_pokemon1.moves = updated_moves1
     print("Updated moves:", returned_pokemon1.moves)
@@ -38,7 +40,9 @@ def update_moves(req: UpdateMovesRequest):
             name=move.name,
             type=move.type,
             power=new_power,
-            description=move.description
+            description=move.description,   
+            status_effect=move.status_effect,
+            status_effect_chance=move.status_effect_chance
         ))
     returned_pokemon2.moves = updated_moves2
     print("Updated moves:", returned_pokemon2.moves)

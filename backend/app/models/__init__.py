@@ -86,6 +86,13 @@ class Pokemon(Base):
     family = relationship("PokemonFamily")
     moves = relationship("Move", secondary=pokemon_instance_moves)
 
+class StatusEffect(Base):
+    __tablename__ = "status_effects"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, unique=True, index=True)
+    description = Column(String)
+
 # Base move (move definition)
 class BaseMove(Base):
     __tablename__ = "base_move"
@@ -96,6 +103,10 @@ class BaseMove(Base):
     description = Column(String)
     minimal_power = Column(String, nullable=True)
     type = relationship("PokemonType")
+    status_effect_id = Column(Integer, ForeignKey("status_effects.id"), nullable=True)
+    status_effect_chance = Column(Integer, nullable=True)  # Percentage chance
+
+    status_effect = relationship("StatusEffect")
 
 # Pokémon-specific move instance
 class Move(Base):

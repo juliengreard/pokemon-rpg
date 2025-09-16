@@ -39,7 +39,9 @@ def create_pokemon(data: schemas.WildPokemonEncounter, db: Session = Depends(get
                 name=move.name,
                 type=t.name,
                 power=attack,
-                description=move.description
+                description=move.description,
+                status_effect=move.status_effect.name if move.status_effect else None,
+                status_effect_chance=30 if move.status_effect else None
             ))
 
     

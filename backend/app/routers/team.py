@@ -142,9 +142,11 @@ def load_team2(db: Session = Depends(get_db)):
             if move:
                 pokemon["moves"].append({
                     "name": move.name,
-                    "type": t.name,
+                    "type": t.name, 
                     "power": move.minimal_power,
-                    "description": move.description
+                    "description": move.description,
+                    "status_effect": move.status_effect.name if move.status_effect else None,
+                    "status_effect_chance": 30 if move.status_effect else None,
                 })
         team.append(pokemon)
     return team
