@@ -46,13 +46,20 @@ export default function PokemonCard({
           onClick={() => removeFromTeam(team, poke.id)}
           style={{
             position: "absolute",
-            top: "6px",
-            right: "6px",
-            background: "red",
+            top: "4px",
+            right: "4px",
+            background: "#f44336",
             color: "white",
             border: "none",
             borderRadius: "50%",
             cursor: "pointer",
+            width: "20px",          // ✅ smaller circle
+            height: "20px",
+            fontSize: "12px",       // ✅ smaller X
+            fontWeight: "bold",
+            lineHeight: "20px",     // ✅ centers the "X" perfectly
+            textAlign: "center",
+            padding: 0,
           }}
         >
           ×
