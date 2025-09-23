@@ -9,7 +9,7 @@ const STATUS_ICONS = {
 };
 
 export default function StatusIcon({ effect, text, onClick }) {
-  console.log("on click : ", onClick);
+  console.log("on click")
   const [hover, setHover] = useState(false);
 
   if (!effect || !STATUS_ICONS[effect]) return null;

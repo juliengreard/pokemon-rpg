@@ -1,7 +1,13 @@
-exercice: 
-- ajouter l'icone "enpoisonnement" à chaque attaque qui peut empoisonner
-- en combat, si on clique sur cet icone, il est transmis au pokemon adverse
-- un pokemon adverse garde l'icone "enpoisonnement" sauf si on reclique dessus
-- en profiter pour factoriser un peu les 3 endroits où sont affichés un pokemon (wild, team, combat)
-
+- mettre en place tests du front
+- mettre en place génération intelligente de moves (algo à réfléchir)
+- finir les status effects (sommeil, etc)
+- enregistrement/chargement de l'équipe en base (pour l'instant c'est à la volée)
+- mettre en place les modifications de l'équipe : level up, nouvelles attaques, évolutions, etc => à enregistrer en base
+- mettre en place le concept de capture de pokémon
+- faire jouer l'environnement et la rareté des pokemons sauvages
 - faire une v1 pour commencer à mettre en place des migrations de db
+
+
+- Affichage HS pour la X
+- Recall ne fonctionne pas
+- La taille de la barre d'hp ne fonctionne pas
