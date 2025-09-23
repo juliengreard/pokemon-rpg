@@ -96,29 +96,31 @@ export default function PokemonCard({
         ))}
       </div>
 
-      {/* HP */}
-      <div style={{ marginTop: "0.5rem" }}>
-        <label>HP: {poke.hp}</label>
-        {inBattle ? (
-          <input
-            type="range"
-            min="0"
-            value={poke.hp}
-            onChange={(e) => updatePokemonHp(team, poke.id, Number(e.target.value))}
-            style={{ width: "100%", accentColor: "green" }}
+    {/* HP */}
+    <div style={{ marginTop: "0.5rem" }}>
+      <label>HP: {poke.hp}</label>
+      {inBattle ? (
+        <input
+          type="range"
+          min="0"
+          max={poke.maxHp}
+          value={poke.hp}
+          onChange={(e) => updatePokemonHp(team, poke.id, Number(e.target.value))}
+          style={{ width: "100%", accentColor: "green" }}
+        />
+      ) : (
+        <div style={{ background: "#ddd", height: "8px", borderRadius: "4px", overflow: "hidden" }}>
+          <div
+            style={{
+              width: `${(poke.hp / poke.maxHp) * 100}%`,
+              background: "green",
+              height: "100%",
+            }}
           />
-        ) : (
-          <div style={{ background: "#ddd", height: "8px", borderRadius: "4px" }}>
-            <div
-              style={{
-                width: `${(poke.hp) * 100}%`,
-                background: "green",
-                height: "100%",
-              }}
-            />
-          </div>
-        )}
-      </div>
+        </div>
+      )}
+    </div>
+
 
       {/* Moves */}
       <div style={{ marginTop: "1rem", textAlign: "left" }}>
