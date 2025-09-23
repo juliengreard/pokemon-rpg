@@ -168,7 +168,17 @@ export default function PokemonCard({
       )}
 
       {inBattle && (
-        <button onClick={() => (team === 1 ? setActive1(null) : setActive2(null))}>
+        <button
+          onClick={() => (setActivePokemon ? setActivePokemon(team, null) : null)}
+          style={{
+            backgroundColor: "#f44336",
+            color: "white",
+            padding: "4px 8px",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+          }}
+        >
           Recall
         </button>
       )}

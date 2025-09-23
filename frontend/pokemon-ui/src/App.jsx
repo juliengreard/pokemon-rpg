@@ -105,11 +105,13 @@ function App() {
     }
   };
 
-  const setActivePokemon = (team, poke) => {
-    if (team === 1) setActive1({ ...poke, moves: [] });
-    else setActive2({ ...poke, moves: [] });
-  };
-
+const setActivePokemon = (team, poke) => {
+  if (team === 1) {
+    setActive1(poke ? { ...poke, moves: [] } : null);
+  } else {
+    setActive2(poke ? { ...poke, moves: [] } : null);
+  }
+};
   const recallActive = (team) => {
     if (team === 1) setActive1(null);
     else setActive2(null);
