@@ -28,23 +28,8 @@ def create_pokemon(data: schemas.WildPokemonEncounter, db: Session = Depends(get
     print("types", family.types)
     
     moves = []
-    # query types of moves available for this family
-    for t in family.types:
-        move = db.query(models.BaseMove).filter(models.BaseMove.type == t).first()
-        if move:
-            attack = move.minimal_power 
-            if attack != "":
-                attack = move.minimal_power # add mechanism to improve power with level
-            moves.append(schemas.Moves(
-                name=move.name,
-                type=t.name,
-                power=attack,
-                description=move.description,
-                status_effect=move.status_effect.name if move.status_effect else None,
-                status_effect_activation_chance=move.status_effect_activation_chance if move.status_effect else None,
-                status_effect_deactivation_chance=move.status_effect_deactivation_chance if move.status_effect else None
-            ))
 
+    from app.pokeapi import get_best_moves
     
     def compute_level(player_level: int) -> int:
         import random
@@ -57,7 +42,16 @@ def create_pokemon(data: schemas.WildPokemonEncounter, db: Session = Depends(get
         return level
     
     pokemon_level = compute_level(data.player_level)
-
+    moves = get_best_moves(family.number, pokemon_level, top_n=4)
+    moves = [schemas.Moves(
+        name=m["name"],
+        type=m["type"],
+        power=str(m["power"]) if m["power"] is not None else None,
+        description=m["effect"] if m["effect"] is not None else "",
+        status_effect=None,
+        status_effect_activation_chance=None,
+        status_effect_deactivation_chance=None
+    ) for m in moves]
 
     return schemas.WildPokemon(
         family = family.name,

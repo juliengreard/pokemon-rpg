@@ -8,6 +8,4 @@
 - faire une v1 pour commencer à mettre en place des migrations de db
 
 
-- Affichage HS pour la X
-- Recall ne fonctionne pas
-- La taille de la barre d'hp ne fonctionne pas
+- utilisation de pokeapi pour récupérer les attaques des pokemons
