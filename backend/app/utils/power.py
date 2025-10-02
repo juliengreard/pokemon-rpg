@@ -2,6 +2,9 @@ from typing import List
 
 def get_power_for_type(current_power: str, move_type: str, opponent_types: List[str]) -> int:
     
+    if not current_power:
+        return current_power  # None or empty
+
     DOUBLE = "double"
     NO_EFFECT = "no_effect"
     DIVIDE = "divide"

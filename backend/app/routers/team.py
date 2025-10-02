@@ -1,3 +1,5 @@
+from app import models, schemas
+from app.pokeapi import get_best_moves
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.database import get_db
@@ -135,19 +137,19 @@ def load_team2(db: Session = Depends(get_db)):
             "types": [t.name for t in family.types],
             "image": f"/pokemon/pokemon/{family.number}.png",
             "moves": []
+
         }
-        # add some moves
-        for t in family.types:
-            move = db.query(models.BaseMove).filter(models.BaseMove.type == t).first()
-            if move:
-                pokemon["moves"].append({
-                    "name": move.name,
-                    "type": t.name, 
-                    "power": move.minimal_power,
-                    "description": move.description,
-                    "status_effect": move.status_effect.name if move.status_effect else None,
-                    "status_effect_activation_chance": move.status_effect_activation_chance if move.status_effect else None,
-                    "status_effect_deactivation_chance": move.status_effect_deactivation_chance if move.status_effect else None
-                })
+        pokemon_level = 20
+        moves = get_best_moves(family.number, pokemon_level, top_n=4)
+        moves = [schemas.Moves(
+            name=m["name"],
+            type=m["type"],
+            power=str(m["power"]) if m["power"] is not None else None,
+            description=m["effect"] if m["effect"] is not None else "",
+            status_effect=None,
+            status_effect_activation_chance=None,
+            status_effect_deactivation_chance=None
+        ) for m in moves]
+        pokemon["moves"] = moves
         team.append(pokemon)
     return team
