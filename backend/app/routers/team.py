@@ -141,15 +141,28 @@ def load_team2(db: Session = Depends(get_db)):
         }
         pokemon_level = 20
         moves = get_best_moves(family.number, pokemon_level, top_n=4)
-        moves = [schemas.Moves(
-            name=m["name"],
-            type=m["type"],
-            power=str(m["power"]) if m["power"] is not None else None,
-            description=m["effect"] if m["effect"] is not None else "",
-            status_effect=None,
-            status_effect_activation_chance=None,
-            status_effect_deactivation_chance=None
-        ) for m in moves]
-        pokemon["moves"] = moves
+        final_moves = []
+        for m in moves:
+            status_effect = None
+            status_effect_activation_chance = None
+            status_effect_deactivation_chance = None
+            print("effect : ", m["effect"])
+            if m["effect"] and "poison the target" in m["effect"].lower():
+                from app.models import StatusEffect
+                poison_effect = db.query(StatusEffect).filter(StatusEffect.name == "Poison").first()
+                status_effect = poison_effect.name if poison_effect else None
+                status_effect_activation_chance = "1d6 <= 2" if poison_effect else None
+                status_effect_deactivation_chance = "1d6 <= 5" if poison_effect else None
+            move = schemas.Moves(
+                name=m["name"],
+                type=m["type"],
+                power=str(m["power"]) if m["power"] is not None else None,
+                description=m["effect"] if m["effect"] is not None else "",
+                status_effect=status_effect,
+                status_effect_activation_chance=status_effect_activation_chance,
+                status_effect_deactivation_chance=status_effect_deactivation_chance
+            )
+            final_moves.append(move)
+        pokemon["moves"] = final_moves
         team.append(pokemon)
     return team

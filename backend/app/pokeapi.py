@@ -48,13 +48,17 @@ def get_pokemon_moves(pokemon_id, level):
                (n["name"] for n in move_data["names"] if n["language"]["name"] == "fr"),
                move_name  # fallback to API's default (English)
             )
+
+
+            short_effect = move_data["effect_entries"][0]["short_effect"] if move_data["effect_entries"] else None
+
             moves.append({
                 "name": french_name,
                 "level": level_learned,
                 "type": translate_type(move_data["type"]["name"]),
                 "power": transform_power_to_dices(move_data["power"]),  # can be None for status moves
                 "accuracy": move_data["accuracy"],
-                "pp": move_data["pp"],
+                "effect": short_effect,
                 "damage_class": move_data["damage_class"]["name"],
                 "effect": move_data["effect_entries"][0]["short_effect"] if move_data["effect_entries"] else None
             })
